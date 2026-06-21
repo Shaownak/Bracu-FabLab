@@ -35,7 +35,7 @@ const staggerContainer = {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } }
 };
 
 export default function FacilitiesPage() {
@@ -104,7 +104,7 @@ export default function FacilitiesPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
             className="text-5xl md:text-7xl font-space font-bold tracking-tighter text-foreground mb-6"
           >
             Equipment <br />
@@ -113,7 +113,7 @@ export default function FacilitiesPage() {
           <motion.p 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
             className="text-lg md:text-xl text-muted-foreground font-light"
           >
             Browse our high-end fabrication machinery. Filter by category, check real-time availability, and secure your time slot.
@@ -125,7 +125,7 @@ export default function FacilitiesPage() {
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] as const }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border">

@@ -20,7 +20,7 @@ const staggerContainer = {
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } }
 };
 
 export default function CertificationsPage() {
@@ -56,7 +56,7 @@ export default function CertificationsPage() {
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
             className="max-w-xl"
           >
             <h2 className="text-3xl font-space font-bold text-foreground flex items-center gap-3 mb-4">
@@ -71,7 +71,7 @@ export default function CertificationsPage() {
           <motion.form 
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] as const }}
             onSubmit={handleVerify} 
             className="w-full md:w-auto flex-1 max-w-md relative"
           >
@@ -126,7 +126,7 @@ export default function CertificationsPage() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
           className="mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-space font-bold text-foreground mb-4 tracking-tight">My Certifications.</h1>

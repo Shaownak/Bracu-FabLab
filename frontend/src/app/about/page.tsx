@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] } }),
+  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } }),
 };
 
 const staggerContainer = {
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
             className="text-5xl md:text-7xl font-space font-bold tracking-tighter text-foreground mb-6"
           >
             BRAC University <br />
@@ -62,7 +62,7 @@ export default function AboutPage() {
           <motion.p 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
             className="text-lg md:text-xl text-muted-foreground font-light"
           >
             The Fabrication Laboratory at BRAC University is a cutting-edge innovation hub that empowers students, faculty, and researchers to explore digital fabrication, rapid prototyping, and advanced manufacturing technologies. We believe in learning by making.
@@ -107,7 +107,7 @@ export default function AboutPage() {
             ].map((item, i) => (
               <motion.div
                 key={item.title}
-                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } } }}
                 className="bg-card border border-border p-10 flex flex-col hover:border-foreground/30 transition-colors"
               >
                 <div className="mb-8 text-foreground">
@@ -128,7 +128,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
             className="mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-space font-bold text-foreground tracking-tight">Our People.</h2>
@@ -146,7 +146,7 @@ export default function AboutPage() {
             {teamMembers.map((member, i) => (
               <motion.div
                 key={member.name}
-                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const } } }}
                 className="group bg-card border border-border hover:border-foreground transition-colors flex flex-col overflow-hidden"
               >
                 {member.image ? (
@@ -177,7 +177,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 text-center"
         >
           <h2 className="text-4xl md:text-5xl font-space font-bold text-foreground tracking-tight">Our Partners.</h2>
