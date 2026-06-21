@@ -18,8 +18,8 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --noinput --settings=fablab.settings.production 2>/dev/null || true
 
-# Create media and logs directories
-RUN mkdir -p media logs
+# Create media, logs, and staticfiles directories
+RUN mkdir -p media logs staticfiles
 
 EXPOSE 8000
 
