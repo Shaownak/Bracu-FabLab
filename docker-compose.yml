@@ -22,7 +22,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: fablab_backend
     restart: unless-stopped
     command: python manage.py runserver 0.0.0.0:8000
@@ -46,7 +46,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ../Dockerfile.frontend
+      dockerfile: Dockerfile
       target: development
     container_name: fablab_frontend
     restart: unless-stopped

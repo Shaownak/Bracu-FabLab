@@ -20,7 +20,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: ../Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: fablab_backend_prod
     restart: always
     command: >
@@ -50,7 +50,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ../Dockerfile.frontend
+      dockerfile: Dockerfile
       target: production
     container_name: fablab_frontend_prod
     restart: always
