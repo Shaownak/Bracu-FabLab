@@ -43,6 +43,13 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 X_FRAME_OPTIONS = 'DENY'
 
+# Proxy settings for Render/Heroku
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    'https://bracu-fablab.onrender.com',
+    'https://bracu-fab-lab.vercel.app'
+]
+
 # Static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
