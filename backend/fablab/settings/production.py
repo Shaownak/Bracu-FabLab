@@ -66,6 +66,9 @@ if os.getenv('AWS_ACCESS_KEY_ID'):
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 # Logging
+log_dir = BASE_DIR / 'logs'
+log_dir.mkdir(parents=True, exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
