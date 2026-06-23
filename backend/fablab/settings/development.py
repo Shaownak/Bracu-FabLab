@@ -6,7 +6,7 @@ from .base import *  # noqa: F401, F403
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 # Disable strict rate limits for development to prevent 429 errors during hot-reloading
 REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {
@@ -37,10 +37,7 @@ else:
     }
 
 # CORS - Allow all in development
-CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
-]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 # Static files
