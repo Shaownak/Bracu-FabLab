@@ -18,6 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me')
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
     # Django built-in
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,9 @@ INSTALLED_APPS = [
     'resources',
     'notifications',
     'analytics',
+
+    # Admin Enhancements
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +168,27 @@ DEFAULT_FROM_EMAIL = 'BRAC University FabLab <noreply@fablab.bracu.ac.bd>'
 
 # Frontend URL for email links
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+
+# Jazzmin Admin Theme Settings
+JAZZMIN_SETTINGS = {
+    "site_title": "FabLab Admin",
+    "site_header": "BRAC University FabLab",
+    "site_brand": "FabLab Platform",
+    "welcome_sign": "Welcome to the FabLab Administration",
+    "search_model": ["accounts.User", "equipment.Equipment", "events.Event"],
+    "show_ui_builder": False,
+    "topmenu_links": [
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "order_with_respect_to": [
+        "accounts",
+        "facilities",
+        "bookings",
+        "events",
+        "trainings",
+        "certifications",
+        "projects",
+        "resources",
+    ],
+}

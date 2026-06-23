@@ -31,3 +31,7 @@ gunicorn==23.0.0
 
 # Utilities
 django-extensions==3.2.3
+
+# Admin Enhancements
+django-jazzmin==3.0.0
+django-import-export==3.3.6

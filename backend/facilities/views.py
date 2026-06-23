@@ -6,6 +6,7 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from accounts.permissions import ReadOnlyOrAdmin
 from .models import EquipmentCategory, Equipment
 from .serializers import (
@@ -24,7 +25,7 @@ class EquipmentCategoryListView(generics.ListAPIView):
 class EquipmentListView(generics.ListCreateAPIView):
     queryset = Equipment.objects.select_related('category').prefetch_related('images')
     permission_classes = [ReadOnlyOrAdmin]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['category', 'status', 'requires_training', 'is_featured']
     search_fields = ['name', 'description', 'location']
     ordering_fields = ['name', 'created_at', 'status']

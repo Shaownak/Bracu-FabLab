@@ -3,6 +3,7 @@ Events admin configuration.
 """
 
 from django.contrib import admin
+from import_export.admin import ExportActionMixin
 from .models import Event, EventRegistration
 
 
@@ -29,7 +30,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 @admin.register(EventRegistration)
-class EventRegistrationAdmin(admin.ModelAdmin):
+class EventRegistrationAdmin(ExportActionMixin, admin.ModelAdmin):
     list_display = ['user', 'event', 'status', 'registered_at']
     list_filter = ['status', 'event']
     search_fields = ['user__email', 'user__first_name', 'event__title']
