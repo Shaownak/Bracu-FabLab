@@ -11,30 +11,65 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('trainings', '0001_initial'),
+        ("trainings", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Certificate',
+            name="Certificate",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('certificate_id', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('pdf_file', models.FileField(blank=True, null=True, upload_to='certificates/pdfs/')),
-                ('qr_code', models.ImageField(blank=True, null=True, upload_to='certificates/qrcodes/')),
-                ('issued_at', models.DateTimeField(auto_now_add=True)),
-                ('expires_at', models.DateTimeField(blank=True, null=True)),
-                ('is_revoked', models.BooleanField(default=False)),
-                ('revoked_reason', models.TextField(blank=True, null=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='certificates', to='trainings.trainingcourse')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='certificates', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "certificate_id",
+                    models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
+                ),
+                (
+                    "pdf_file",
+                    models.FileField(
+                        blank=True, null=True, upload_to="certificates/pdfs/"
+                    ),
+                ),
+                (
+                    "qr_code",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="certificates/qrcodes/"
+                    ),
+                ),
+                ("issued_at", models.DateTimeField(auto_now_add=True)),
+                ("expires_at", models.DateTimeField(blank=True, null=True)),
+                ("is_revoked", models.BooleanField(default=False)),
+                ("revoked_reason", models.TextField(blank=True, null=True)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="certificates",
+                        to="trainings.trainingcourse",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="certificates",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Certificate',
-                'verbose_name_plural': 'Certificates',
-                'ordering': ['-issued_at'],
-                'unique_together': {('user', 'course')},
+                "verbose_name": "Certificate",
+                "verbose_name_plural": "Certificates",
+                "ordering": ["-issued_at"],
+                "unique_together": {("user", "course")},
             },
         ),
     ]

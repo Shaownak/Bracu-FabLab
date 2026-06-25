@@ -9,7 +9,7 @@ from .models import EquipmentCategory, Equipment, EquipmentImage
 class EquipmentImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = EquipmentImage
-        fields = ['id', 'image', 'caption', 'is_primary', 'order']
+        fields = ["id", "image", "caption", "is_primary", "order"]
 
 
 class EquipmentCategorySerializer(serializers.ModelSerializer):
@@ -17,21 +17,39 @@ class EquipmentCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EquipmentCategory
-        fields = ['id', 'name', 'slug', 'description', 'icon', 'order', 'equipment_count']
+        fields = [
+            "id",
+            "name",
+            "slug",
+            "description",
+            "icon",
+            "order",
+            "equipment_count",
+        ]
 
     def get_equipment_count(self, obj):
         return obj.equipment.count()
 
 
 class EquipmentListSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
+    category_name = serializers.CharField(source="category.name", read_only=True)
     primary_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Equipment
         fields = [
-            'id', 'name', 'slug', 'category', 'category_name', 'status',
-            'location', 'is_featured', 'requires_training', 'primary_image', 'image', 'description'
+            "id",
+            "name",
+            "slug",
+            "category",
+            "category_name",
+            "status",
+            "location",
+            "is_featured",
+            "requires_training",
+            "primary_image",
+            "image",
+            "description",
         ]
 
     def get_primary_image(self, obj):
@@ -51,9 +69,23 @@ class EquipmentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         fields = [
-            'id', 'name', 'slug', 'category', 'description', 'specifications',
-            'status', 'image', 'user_manual', 'requires_training', 'required_certification',
-            'hourly_rate', 'location', 'is_featured', 'images', 'created_at', 'updated_at'
+            "id",
+            "name",
+            "slug",
+            "category",
+            "description",
+            "specifications",
+            "status",
+            "image",
+            "user_manual",
+            "requires_training",
+            "required_certification",
+            "hourly_rate",
+            "location",
+            "is_featured",
+            "images",
+            "created_at",
+            "updated_at",
         ]
 
 
@@ -61,7 +93,17 @@ class EquipmentCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         fields = [
-            'name', 'slug', 'category', 'description', 'specifications',
-            'status', 'image', 'user_manual', 'requires_training', 'required_certification',
-            'hourly_rate', 'location', 'is_featured'
+            "name",
+            "slug",
+            "category",
+            "description",
+            "specifications",
+            "status",
+            "image",
+            "user_manual",
+            "requires_training",
+            "required_certification",
+            "hourly_rate",
+            "location",
+            "is_featured",
         ]

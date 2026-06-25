@@ -14,7 +14,7 @@ User = get_user_model()
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['skills', 'social_links', 'preferences']
+        fields = ["skills", "social_links", "preferences"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,11 +24,23 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'username', 'first_name', 'last_name', 'full_name',
-            'role', 'student_id', 'department', 'phone', 'avatar', 'bio',
-            'is_verified', 'date_joined', 'profile'
+            "id",
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "full_name",
+            "role",
+            "student_id",
+            "department",
+            "phone",
+            "avatar",
+            "bio",
+            "is_verified",
+            "date_joined",
+            "profile",
         ]
-        read_only_fields = ['id', 'email', 'role', 'is_verified', 'date_joined']
+        read_only_fields = ["id", "email", "role", "is_verified", "date_joined"]
 
     def get_full_name(self, obj):
         return obj.get_full_name()
@@ -41,18 +53,30 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'username', 'first_name', 'last_name', 'password',
-            'password_confirm', 'role', 'student_id', 'department', 'phone'
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "password",
+            "password_confirm",
+            "role",
+            "student_id",
+            "department",
+            "phone",
         ]
 
     def validate(self, attrs):
-        if attrs['password'] != attrs.pop('password_confirm'):
-            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+        if attrs["password"] != attrs.pop("password_confirm"):
+            raise serializers.ValidationError(
+                {"password_confirm": "Passwords do not match."}
+            )
 
         # Only allow student and faculty roles for self-registration
-        role = attrs.get('role', 'student')
-        if role not in ['student', 'faculty']:
-            raise serializers.ValidationError({'role': 'Invalid role for registration.'})
+        role = attrs.get("role", "student")
+        if role not in ["student", "faculty"]:
+            raise serializers.ValidationError(
+                {"role": "Invalid role for registration."}
+            )
 
         return attrs
 
@@ -66,15 +90,23 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'phone', 'avatar', 'bio', 'department', 'profile']
+        fields = [
+            "first_name",
+            "last_name",
+            "phone",
+            "avatar",
+            "bio",
+            "department",
+            "profile",
+        ]
 
     def update(self, instance, validated_data):
-        profile_data = validated_data.pop('profile', {})
+        profile_data = validated_data.pop("profile", {})
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        if profile_data and hasattr(instance, 'profile'):
+        if profile_data and hasattr(instance, "profile"):
             for attr, value in profile_data.items():
                 setattr(instance.profile, attr, value)
             instance.profile.save()
@@ -87,7 +119,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        data['user'] = UserSerializer(self.user).data
+        data["user"] = UserSerializer(self.user).data
         return data
 
 
@@ -101,18 +133,30 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
     password_confirm = serializers.CharField()
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+        if attrs["password"] != attrs["password_confirm"]:
+            raise serializers.ValidationError(
+                {"password_confirm": "Passwords do not match."}
+            )
         return attrs
 
 
 class UserListSerializer(serializers.ModelSerializer):
     """Simplified user serializer for lists."""
+
     full_name = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'full_name', 'role', 'student_id', 'department', 'is_verified', 'date_joined']
+        fields = [
+            "id",
+            "email",
+            "full_name",
+            "role",
+            "student_id",
+            "department",
+            "is_verified",
+            "date_joined",
+        ]
 
     def get_full_name(self, obj):
         return obj.get_full_name()

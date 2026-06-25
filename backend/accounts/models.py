@@ -11,10 +11,10 @@ class User(AbstractUser):
     """Custom user model with role-based access control."""
 
     class Role(models.TextChoices):
-        VISITOR = 'visitor', 'Visitor'
-        STUDENT = 'student', 'Student'
-        FACULTY = 'faculty', 'Faculty'
-        ADMIN = 'admin', 'Administrator'
+        VISITOR = "visitor", "Visitor"
+        STUDENT = "student", "Student"
+        FACULTY = "faculty", "Faculty"
+        ADMIN = "admin", "Administrator"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
@@ -22,18 +22,18 @@ class User(AbstractUser):
     student_id = models.CharField(max_length=20, blank=True, null=True, unique=True)
     department = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=20, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     bio = models.TextField(blank=True)
     is_verified = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     class Meta:
-        ordering = ['-date_joined']
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        ordering = ["-date_joined"]
+        verbose_name = "User"
+        verbose_name_plural = "Users"
 
     def __str__(self):
         return f"{self.get_full_name()} ({self.email})"
@@ -54,7 +54,7 @@ class User(AbstractUser):
 class Profile(models.Model):
     """Extended user profile with additional information."""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     skills = models.JSONField(default=list, blank=True)
     social_links = models.JSONField(default=dict, blank=True)
     preferences = models.JSONField(default=dict, blank=True)

@@ -16,38 +16,85 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ResourceCategory',
+            name="ResourceCategory",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("slug", models.SlugField(unique=True)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'verbose_name': 'Resource Category',
-                'verbose_name_plural': 'Resource Categories',
-                'ordering': ['name'],
+                "verbose_name": "Resource Category",
+                "verbose_name_plural": "Resource Categories",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Resource',
+            name="Resource",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=300)),
-                ('description', models.TextField(blank=True)),
-                ('file', models.FileField(upload_to='resources/files/')),
-                ('resource_type', models.CharField(choices=[('tutorial', 'Tutorial'), ('manual', 'User Manual'), ('sop', 'Standard Operating Procedure'), ('safety', 'Safety Guideline'), ('other', 'Other')], max_length=20)),
-                ('file_size', models.PositiveIntegerField(default=0, help_text='File size in bytes')),
-                ('download_count', models.PositiveIntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('uploaded_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='resources', to='resources.resourcecategory')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=300)),
+                ("description", models.TextField(blank=True)),
+                ("file", models.FileField(upload_to="resources/files/")),
+                (
+                    "resource_type",
+                    models.CharField(
+                        choices=[
+                            ("tutorial", "Tutorial"),
+                            ("manual", "User Manual"),
+                            ("sop", "Standard Operating Procedure"),
+                            ("safety", "Safety Guideline"),
+                            ("other", "Other"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "file_size",
+                    models.PositiveIntegerField(
+                        default=0, help_text="File size in bytes"
+                    ),
+                ),
+                ("download_count", models.PositiveIntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "uploaded_by",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="resources",
+                        to="resources.resourcecategory",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Resource',
-                'verbose_name_plural': 'Resources',
-                'ordering': ['-created_at'],
+                "verbose_name": "Resource",
+                "verbose_name_plural": "Resources",
+                "ordering": ["-created_at"],
             },
         ),
     ]

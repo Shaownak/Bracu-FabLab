@@ -10,66 +10,140 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('trainings', '0001_initial'),
+        ("trainings", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='EquipmentCategory',
+            name="EquipmentCategory",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField(blank=True)),
-                ('icon', models.ImageField(blank=True, null=True, upload_to='categories/icons/')),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("slug", models.SlugField(unique=True)),
+                ("description", models.TextField(blank=True)),
+                (
+                    "icon",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="categories/icons/"
+                    ),
+                ),
+                ("order", models.PositiveIntegerField(default=0)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'verbose_name': 'Equipment Category',
-                'verbose_name_plural': 'Equipment Categories',
-                'ordering': ['order', 'name'],
+                "verbose_name": "Equipment Category",
+                "verbose_name_plural": "Equipment Categories",
+                "ordering": ["order", "name"],
             },
         ),
         migrations.CreateModel(
-            name='Equipment',
+            name="Equipment",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=200)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField()),
-                ('specifications', models.JSONField(blank=True, default=dict)),
-                ('status', models.CharField(choices=[('available', 'Available'), ('in_use', 'In Use'), ('maintenance', 'Under Maintenance'), ('retired', 'Retired')], default='available', max_length=20)),
-                ('user_manual', models.FileField(blank=True, null=True, upload_to='equipment/manuals/')),
-                ('requires_training', models.BooleanField(default=False)),
-                ('hourly_rate', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True)),
-                ('location', models.CharField(blank=True, max_length=100)),
-                ('is_featured', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('required_certification', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='required_for_equipment', to='trainings.trainingcourse')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='equipment', to='facilities.equipmentcategory')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=200)),
+                ("slug", models.SlugField(unique=True)),
+                ("description", models.TextField()),
+                ("specifications", models.JSONField(blank=True, default=dict)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("available", "Available"),
+                            ("in_use", "In Use"),
+                            ("maintenance", "Under Maintenance"),
+                            ("retired", "Retired"),
+                        ],
+                        default="available",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "user_manual",
+                    models.FileField(
+                        blank=True, null=True, upload_to="equipment/manuals/"
+                    ),
+                ),
+                ("requires_training", models.BooleanField(default=False)),
+                (
+                    "hourly_rate",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=10, null=True
+                    ),
+                ),
+                ("location", models.CharField(blank=True, max_length=100)),
+                ("is_featured", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "required_certification",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="required_for_equipment",
+                        to="trainings.trainingcourse",
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="equipment",
+                        to="facilities.equipmentcategory",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Equipment',
-                'verbose_name_plural': 'Equipment',
-                'ordering': ['category', 'name'],
+                "verbose_name": "Equipment",
+                "verbose_name_plural": "Equipment",
+                "ordering": ["category", "name"],
             },
         ),
         migrations.CreateModel(
-            name='EquipmentImage',
+            name="EquipmentImage",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('image', models.ImageField(upload_to='equipment/images/')),
-                ('caption', models.CharField(blank=True, max_length=200)),
-                ('is_primary', models.BooleanField(default=False)),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('equipment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='facilities.equipment')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="equipment/images/")),
+                ("caption", models.CharField(blank=True, max_length=200)),
+                ("is_primary", models.BooleanField(default=False)),
+                ("order", models.PositiveIntegerField(default=0)),
+                (
+                    "equipment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="facilities.equipment",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Equipment Image',
-                'verbose_name_plural': 'Equipment Images',
-                'ordering': ['order'],
+                "verbose_name": "Equipment Image",
+                "verbose_name_plural": "Equipment Images",
+                "ordering": ["order"],
             },
         ),
     ]

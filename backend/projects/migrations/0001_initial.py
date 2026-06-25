@@ -16,54 +16,117 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ProjectCategory',
+            name="ProjectCategory",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("slug", models.SlugField(unique=True)),
+                ("description", models.TextField(blank=True)),
             ],
             options={
-                'verbose_name': 'Project Category',
-                'verbose_name_plural': 'Project Categories',
-                'ordering': ['name'],
+                "verbose_name": "Project Category",
+                "verbose_name_plural": "Project Categories",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('title', models.CharField(max_length=300)),
-                ('slug', models.SlugField(unique=True)),
-                ('description', models.TextField()),
-                ('technologies', models.JSONField(blank=True, default=list)),
-                ('videos', models.JSONField(blank=True, default=list)),
-                ('awards', models.TextField(blank=True)),
-                ('is_featured', models.BooleanField(default=False)),
-                ('status', models.CharField(choices=[('draft', 'Draft'), ('published', 'Published'), ('archived', 'Archived')], default='draft', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('supervisor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supervised_projects', to=settings.AUTH_USER_MODEL)),
-                ('team_members', models.ManyToManyField(blank=True, related_name='projects', to=settings.AUTH_USER_MODEL)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='projects', to='projects.projectcategory')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("title", models.CharField(max_length=300)),
+                ("slug", models.SlugField(unique=True)),
+                ("description", models.TextField()),
+                ("technologies", models.JSONField(blank=True, default=list)),
+                ("videos", models.JSONField(blank=True, default=list)),
+                ("awards", models.TextField(blank=True)),
+                ("is_featured", models.BooleanField(default=False)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("draft", "Draft"),
+                            ("published", "Published"),
+                            ("archived", "Archived"),
+                        ],
+                        default="draft",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "supervisor",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="supervised_projects",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "team_members",
+                    models.ManyToManyField(
+                        blank=True, related_name="projects", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="projects",
+                        to="projects.projectcategory",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Project',
-                'verbose_name_plural': 'Projects',
-                'ordering': ['-created_at'],
+                "verbose_name": "Project",
+                "verbose_name_plural": "Projects",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.CreateModel(
-            name='ProjectImage',
+            name="ProjectImage",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('image', models.ImageField(upload_to='projects/images/')),
-                ('caption', models.CharField(blank=True, max_length=200)),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='projects.project')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="projects/images/")),
+                ("caption", models.CharField(blank=True, max_length=200)),
+                ("order", models.PositiveIntegerField(default=0)),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="projects.project",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order'],
+                "ordering": ["order"],
             },
         ),
     ]
