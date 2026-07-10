@@ -29,7 +29,13 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      await authAPI.register(formData);
+      const payload: any = {
+        ...formData,
+        password_confirm: formData.password,
+        student_id: formData.student_id.trim() || undefined,
+        username: formData.username.trim() || formData.email.split('@')[0],
+      };
+      await authAPI.register(payload);
       router.push('/login?registered=true');
     } catch (err: any) {
       const data = err.response?.data;

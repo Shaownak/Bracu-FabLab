@@ -48,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
-    password_confirm = serializers.CharField(write_only=True)
+    password_confirm = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = User
@@ -66,17 +66,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
-        if attrs["password"] != attrs.pop("password_confirm"):
+        password_confirm = attrs.pop("password_confirm", None)
+        if password_confirm and attrs["password"] != password_confirm:
             raise serializers.ValidationError(
                 {"password_confirm": "Passwords do not match."}
             )
 
-        # Only allow student and faculty roles for self-registration
         role = attrs.get("role", "student")
-        if role not in ["student", "faculty"]:
+        if role not in ["student", "faculty", "visitor"]:
             raise serializers.ValidationError(
                 {"role": "Invalid role for registration."}
             )
+
+        if not attrs.get("student_id"):
+            attrs["student_id"] = None
+
+        if not attrs.get("username"):
+            attrs["username"] = attrs["email"].split("@")[0]
 
         return attrs
 
