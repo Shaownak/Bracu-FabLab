@@ -43,28 +43,35 @@ export default function DashboardPage() {
   }, [isLoading, isAuthenticated, user, router, fetchProfile]);
 
   useEffect(() => {
+    if (!isAuthenticated || !user?.id) {
+      setDashboardData({
+        recentBookings: [],
+        upcomingEvents: [],
+        notificationsCount: 0
+      });
+      return;
+    }
+
     const fetchDashboardData = async () => {
-      if (isAuthenticated) {
-        try {
-          const [bookingsRes, eventsRes, notifsRes] = await Promise.all([
-            bookingAPI.list({ limit: '5' }),
-            eventAPI.myEvents(),
-            notificationAPI.unreadCount()
-          ]);
-          
-          setDashboardData({
-            recentBookings: bookingsRes.data.results || bookingsRes.data || [],
-            upcomingEvents: eventsRes.data.results || eventsRes.data || [],
-            notificationsCount: notifsRes.data.unread_count || 0
-          });
-        } catch (error) {
-          console.error("Failed to load dashboard data", error);
-        }
+      try {
+        const [bookingsRes, eventsRes, notifsRes] = await Promise.all([
+          bookingAPI.list({ limit: '5' }),
+          eventAPI.myEvents(),
+          notificationAPI.unreadCount()
+        ]);
+        
+        setDashboardData({
+          recentBookings: bookingsRes.data.results || bookingsRes.data || [],
+          upcomingEvents: eventsRes.data.results || eventsRes.data || [],
+          notificationsCount: notifsRes.data.unread_count || 0
+        });
+      } catch (error) {
+        console.error("Failed to load dashboard data", error);
       }
     };
 
     fetchDashboardData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id]);
 
   const handleLogout = () => {
     logout();

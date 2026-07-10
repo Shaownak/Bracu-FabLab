@@ -171,4 +171,11 @@ class BookingCalendarView(APIView):
         if equipment_id:
             queryset = queryset.filter(equipment_id=equipment_id)
 
-        return Response(BookingListSerializer(queryset, many=True).data)
+        data = BookingListSerializer(queryset, many=True).data
+        is_admin = request.user.role == "admin" or request.user.is_superuser
+        if not is_admin:
+            for item in data:
+                if str(item.get("user")) != str(request.user.id):
+                    item["user"] = None
+                    item["user_name"] = "Reserved Slot"
+        return Response(data)
