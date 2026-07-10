@@ -27,10 +27,21 @@ export default function BookingModal({ isOpen, onClose, equipmentId, equipmentNa
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (isOpen && !equipmentId) {
-      equipmentAPI.list().then(res => {
-        setEquipments(res.data.results || res.data || []);
-      });
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        equipment: equipmentId || prev.equipment || '',
+      }));
+      setError('');
+      if (!equipmentId) {
+        equipmentAPI.list().then(res => {
+          const list = res.data.results || res.data || [];
+          setEquipments(list);
+          if (list.length > 0 && !formData.equipment) {
+            setFormData(prev => ({ ...prev, equipment: list[0].id }));
+          }
+        });
+      }
     }
   }, [isOpen, equipmentId]);
 
@@ -40,7 +51,12 @@ export default function BookingModal({ isOpen, onClose, equipmentId, equipmentNa
     setError('');
     
     try {
-      await bookingAPI.create(formData);
+      const payload = {
+        ...formData,
+        equipment: equipmentId || formData.equipment,
+        purpose: formData.purpose.trim() || 'Equipment booking request for fabrication project.',
+      };
+      await bookingAPI.create(payload);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);

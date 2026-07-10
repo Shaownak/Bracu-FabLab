@@ -73,6 +73,8 @@ class BookingDetailSerializer(serializers.ModelSerializer):
 
 
 class BookingCreateSerializer(serializers.ModelSerializer):
+    purpose = serializers.CharField(required=False, allow_blank=True, default="General fabrication project")
+
     class Meta:
         model = Booking
         fields = ["equipment", "date", "start_time", "end_time", "purpose"]
