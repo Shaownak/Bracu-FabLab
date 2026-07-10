@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Search, Users, Award, FolderGit2, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { projectAPI } from '@/lib/api';
+import { resolveImageUrl } from '@/lib/utils';
 
 interface ProjectData {
   id: string;
@@ -165,7 +166,7 @@ export default function ProjectsPage() {
                 className="group flex flex-col justify-between bg-card structural-border hover:border-foreground/30 transition-colors min-h-[400px] overflow-hidden"
               >
                 <div className="relative h-48 w-full overflow-hidden border-b border-border">
-                  <Image src={project.image || '/images/project_drone.png'} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={resolveImageUrl(project.image) || '/images/project_drone.png'} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   {project.award && (
                     <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 text-xs font-medium border border-amber-500/20 bg-amber-500 text-amber-950 shadow-lg backdrop-blur-sm z-10">
                       <Award size={12} /> Award

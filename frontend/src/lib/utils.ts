@@ -25,3 +25,13 @@ export function truncate(str: string, length: number): string {
   if (str.length <= length) return str;
   return str.slice(0, length) + '...';
 }
+
+export function resolveImageUrl(url: string | undefined | null): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/media/')) {
+    const backendHost = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api\/?$/, '') || 'https://bracu-fablab.onrender.com';
+    return `${backendHost}${url}`;
+  }
+  return url;
+}

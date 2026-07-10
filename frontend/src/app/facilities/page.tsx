@@ -9,6 +9,7 @@ import BookingModal from '@/components/booking/BookingModal';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
 import { equipmentAPI } from '@/lib/api';
+import { resolveImageUrl } from '@/lib/utils';
 
 const staticCategories = [
   { id: 'all', name: 'All Equipment', icon: Filter },
@@ -185,7 +186,7 @@ export default function FacilitiesPage() {
                     <div className="relative w-full h-48 bg-muted border-b border-border overflow-hidden">
                       {item.image || item.primary_image?.image ? (
                         <Image
-                          src={item.image || item.primary_image?.image}
+                          src={resolveImageUrl(item.image || item.primary_image?.image)}
                           alt={item.name || 'Equipment'}
                           fill
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
