@@ -70,8 +70,12 @@ CSRF_TRUSTED_ORIGINS = list(set([
     "https://bracu-fab-lab.vercel.app",
 ] + extra_csrf))
 
-# Static files
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# Static files (use non-manifest storage to prevent 500 errors if any admin asset is uncollected)
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+# Media files
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 
 # File Storage - AWS S3 (when configured)
 if os.getenv("AWS_ACCESS_KEY_ID"):

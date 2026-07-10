@@ -55,13 +55,21 @@ class Resource(models.Model):
         verbose_name = "Resource"
         verbose_name_plural = "Resources"
 
+    def save(self, *args, **kwargs):
+        if self.file and not self.file_size:
+            try:
+                self.file_size = self.file.size
+            except Exception:
+                self.file_size = 0
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
 
     @property
     def file_size_display(self):
         """Human-readable file size."""
-        size = self.file_size
+        size = self.file_size or 0
         for unit in ["B", "KB", "MB", "GB"]:
             if size < 1024:
                 return f"{size:.1f} {unit}"
