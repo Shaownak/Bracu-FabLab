@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PlayCircle, Clock, Award, ChevronRight, CheckCircle2, Loader2 } from 'lucide-react';
+import { PlayCircle, Clock, Award, ChevronRight, CheckCircle2, Loader2, X, Info, BookOpen, UserCheck } from 'lucide-react';
 import Image from 'next/image';
 import { trainingAPI } from '@/lib/api';
 
@@ -15,6 +15,9 @@ interface CourseData {
   enrolled: boolean;
   progress: number;
   certified: boolean;
+  description?: string;
+  syllabus?: string;
+  instructor?: string;
 }
 
 const staggerContainer = {
@@ -34,6 +37,7 @@ export default function TrainingsPage() {
   const [activeTab, setActiveTab] = useState('all');
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [detailCourse, setDetailCourse] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -136,7 +140,8 @@ export default function TrainingsPage() {
             <motion.div 
               key={course.id} 
               variants={fadeUp}
-              className="group bg-card border border-border hover:border-foreground/30 transition-colors flex flex-col justify-between min-h-[350px] p-8 relative overflow-hidden"
+              onClick={() => setDetailCourse(course)}
+              className="group bg-card border border-border hover:border-primary/50 transition-all flex flex-col justify-between min-h-[350px] p-8 relative overflow-hidden cursor-pointer shadow-sm hover:shadow-md"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative z-10 flex flex-col h-full">
@@ -161,9 +166,13 @@ export default function TrainingsPage() {
                     {course.title}
                   </h3>
                   
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                     <span className="flex items-center gap-1.5"><Clock size={16} /> {course.duration}</span>
                     <span className="flex items-center gap-1.5"><PlayCircle size={16} /> {course.modules} Modules</span>
+                  </div>
+
+                  <div className="text-xs font-mono text-primary flex items-center gap-1 mb-2 opacity-80 group-hover:opacity-100 transition-opacity">
+                    <Info size={12} /> Click to view full syllabus & objectives
                   </div>
                 </div>
                 
@@ -182,7 +191,10 @@ export default function TrainingsPage() {
                           className="absolute inset-y-0 left-0 bg-foreground"
                         />
                       </div>
-                      <button className="relative overflow-hidden group/btn flex items-center justify-between w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all bg-foreground text-background hover:bg-foreground/90 hover:scale-[1.02] active:scale-[0.98]">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); }}
+                        className="relative overflow-hidden group/btn flex items-center justify-between w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all bg-foreground text-background hover:bg-foreground/90 hover:scale-[1.02] active:scale-[0.98]"
+                      >
                         <div className="absolute inset-0 -translate-x-full bg-background/20 group-hover/btn:animate-shimmer pointer-events-none" />
                         <span>{course.progress === 100 ? 'Review Course' : 'Continue Course'}</span>
                         <ChevronRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -190,7 +202,10 @@ export default function TrainingsPage() {
                     </div>
                   ) : (
                     <div className="pt-6 border-t border-border">
-                      <button className="relative overflow-hidden group/btn flex items-center justify-center w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all border border-border text-foreground hover:border-foreground">
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); }}
+                        className="relative overflow-hidden group/btn flex items-center justify-center w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all border border-border text-foreground hover:border-foreground"
+                      >
                         <div className="absolute inset-0 -translate-x-full bg-foreground/5 group-hover/btn:translate-x-0 transition-transform duration-300 pointer-events-none" />
                         <span className="relative z-10">Enroll Now</span>
                       </button>
@@ -204,14 +219,7 @@ export default function TrainingsPage() {
         )}
 
         {!isLoading && filteredCourses.length === 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60 grayscale pointer-events-none mt-6 relative">
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="bg-background/90 backdrop-blur-sm border border-border px-8 py-6 flex flex-col items-center">
-                <PlayCircle className="h-10 w-10 text-muted-foreground mb-3" />
-                <h3 className="text-xl font-space font-semibold text-foreground">No Courses Found</h3>
-                <p className="text-sm text-muted-foreground mt-1">Showing placeholders</p>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60 grayscale pointer-events-none mt-6">
             {[1, 2, 3].map((i) => (
               <div 
                 key={`dummy-${i}`} 
@@ -252,6 +260,100 @@ export default function TrainingsPage() {
           </div>
         )}
       </section>
+
+      {/* Course Syllabus & Details Modal */}
+      {detailCourse && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-3xl bg-card border border-border shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="relative bg-muted/40 p-8 border-b border-border flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-3 py-1 text-xs font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/30">
+                    {detailCourse.level || 'Beginner Level'}
+                  </span>
+                  {detailCourse.certified && (
+                    <span className="px-3 py-1 text-xs font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 flex items-center gap-1">
+                      <CheckCircle2 size={12} /> Certified Course
+                    </span>
+                  )}
+                </div>
+                <h2 className="text-3xl font-space font-bold text-foreground">{detailCourse.title}</h2>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
+                  <span className="flex items-center gap-1.5"><Clock size={16} className="text-primary" /> {detailCourse.duration}</span>
+                  <span className="flex items-center gap-1.5"><PlayCircle size={16} className="text-primary" /> {detailCourse.modules} Modules</span>
+                  {detailCourse.instructor && <span className="flex items-center gap-1.5"><UserCheck size={16} className="text-primary" /> {detailCourse.instructor}</span>}
+                </div>
+              </div>
+
+              <button
+                onClick={() => setDetailCourse(null)}
+                className="p-2.5 bg-background hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
+                aria-label="Close details"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8 max-h-[60vh] overflow-y-auto space-y-6">
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-2">Course Overview</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {detailCourse.description || 'Mandatory training course covering safety protocols, equipment setup, digital design workflows, and hands-on machine operation at BRACU FabLab.'}
+                </p>
+              </div>
+
+              {/* Syllabus & Modules */}
+              <div className="border-t border-border pt-6">
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4 flex items-center gap-2">
+                  <BookOpen size={16} /> Course Syllabus & Modules
+                </h4>
+                <div className="space-y-3">
+                  {detailCourse.syllabus ? (
+                    <div className="bg-muted/30 p-4 border border-border text-sm text-foreground whitespace-pre-line">
+                      {detailCourse.syllabus}
+                    </div>
+                  ) : (
+                    Array.from({ length: detailCourse.modules || 4 }).map((_, mIdx) => (
+                      <div key={mIdx} className="flex items-center justify-between p-3.5 bg-muted/20 border border-border/60">
+                        <div className="flex items-center gap-3">
+                          <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center font-mono text-xs font-bold">
+                            {mIdx + 1}
+                          </span>
+                          <span className="text-sm font-medium text-foreground">
+                            Module {mIdx + 1}: {['Safety Fundamentals & PPE', 'CAD Design & Preparation', 'Machine Setup & Calibration', 'Hands-On Operation & Troubleshooting'][mIdx] || 'Practical Session'}
+                          </span>
+                        </div>
+                        <span className="text-xs font-mono text-muted-foreground">30-45 mins</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 bg-muted/30 border-t border-border flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDetailCourse(null)}
+                className="px-6 py-3 text-sm font-space font-medium border border-border hover:bg-muted transition-colors text-foreground"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  alert(`Enrolling in ${detailCourse.title}...`);
+                  setDetailCourse(null);
+                }}
+                className="px-8 py-3 text-sm font-space font-bold tracking-widest uppercase bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Enroll Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Users, Award, FolderGit2, Loader2 } from 'lucide-react';
+import { Search, Users, Award, FolderGit2, Loader2, X, Info, ExternalLink, Layers } from 'lucide-react';
 import Image from 'next/image';
 import { projectAPI } from '@/lib/api';
 import { resolveImageUrl } from '@/lib/utils';
@@ -13,9 +13,10 @@ interface ProjectData {
   image: string;
   category: string;
   team: string;
+  supervisor?: string;
+  description?: string;
   tech: string[];
-  supervisor: string;
-  award: string;
+  award?: boolean;
 }
 
 const staggerContainer = {
@@ -37,6 +38,7 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectData[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
   const [isLoading, setIsLoading] = useState(true);
+  const [detailProject, setDetailProject] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -163,17 +165,24 @@ export default function ProjectsPage() {
               <motion.div 
                 key={project.id} 
                 variants={fadeUp}
-                className="group flex flex-col justify-between bg-card structural-border hover:border-foreground/30 transition-colors min-h-[400px] overflow-hidden"
+                onClick={() => setDetailProject(project)}
+                className="group flex flex-col justify-between bg-card structural-border hover:border-primary/50 transition-all min-h-[400px] overflow-hidden cursor-pointer shadow-sm hover:shadow-md"
               >
-                <div className="relative h-48 w-full overflow-hidden border-b border-border">
-                  <Image src={resolveImageUrl(project.image) || '/images/project_drone.png'} alt={project.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-border bg-muted/40 flex items-center justify-center">
+                  <Image src={resolveImageUrl(project.image) || '/images/project_drone.png'} alt="" fill className="object-cover blur-2xl opacity-30 scale-125 pointer-events-none" />
+                  <Image src={resolveImageUrl(project.image) || '/images/project_drone.png'} alt={project.title} fill className="object-contain p-3 transition-transform duration-700 group-hover:scale-105 z-10" />
                   {project.award && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 text-xs font-medium border border-amber-500/20 bg-amber-500 text-amber-950 shadow-lg backdrop-blur-sm z-10">
-                      <Award size={12} /> Award
+                    <div className="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 text-xs font-medium border border-amber-500/20 bg-amber-500 text-amber-950 shadow-lg backdrop-blur-sm z-20">
+                      <Award size={12} /> Awarded
                     </div>
                   )}
-                  <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 text-xs font-medium border border-border bg-background/80 backdrop-blur-md text-foreground z-10">
+                  <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 text-xs font-medium border border-border bg-background/80 backdrop-blur-md text-foreground z-20">
                     {project.category}
+                  </div>
+                  <div className="absolute bottom-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono bg-background/90 text-foreground border border-border shadow-sm backdrop-blur-md">
+                      <Info size={12} className="text-primary" /> Project Details
+                    </span>
                   </div>
                 </div>
                 <div className="p-8 flex-1 flex flex-col justify-between">
@@ -182,9 +191,14 @@ export default function ProjectsPage() {
                       {project.title}
                     </h3>
                     
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-                      <Users size={14} /> {project.team} · {project.supervisor}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                      <Users size={14} className="text-primary" /> {project.team} {project.supervisor ? `· ${project.supervisor}` : ''}
                     </div>
+                    {project.description && (
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
+                        {project.description}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap gap-2 pt-6 border-t border-border mt-auto">
@@ -243,6 +257,89 @@ export default function ProjectsPage() {
           </div>
         )}
       </section>
+
+      {/* Project Details Modal */}
+      {detailProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-3xl bg-card border border-border shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header & Auto-Adjust Photo */}
+            <div className="relative w-full aspect-[16/9] bg-muted/40 border-b border-border overflow-hidden flex items-center justify-center">
+              <Image
+                src={resolveImageUrl(detailProject.image) || '/images/project_drone.png'}
+                alt=""
+                fill
+                className="object-cover blur-3xl opacity-30 scale-125 pointer-events-none"
+              />
+              <Image
+                src={resolveImageUrl(detailProject.image) || '/images/project_drone.png'}
+                alt={detailProject.title}
+                fill
+                className="object-contain p-4 z-10"
+              />
+
+              <button
+                onClick={() => setDetailProject(null)}
+                className="absolute top-4 right-4 z-30 p-2.5 bg-background/80 hover:bg-background text-foreground border border-border shadow-md transition-colors"
+                aria-label="Close details"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="absolute bottom-4 left-4 z-20 flex flex-wrap gap-2">
+                <span className="px-3 py-1 text-xs font-mono font-bold bg-background/90 text-primary border border-border shadow-sm backdrop-blur-md uppercase">
+                  {detailProject.category}
+                </span>
+                {detailProject.award && (
+                  <span className="px-3 py-1 text-xs font-medium border border-amber-500/30 bg-amber-500/10 text-amber-500 shadow-sm backdrop-blur-md flex items-center gap-1.5">
+                    <Award size={12} /> Award Winning
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-8 max-h-[60vh] overflow-y-auto space-y-6">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-2">
+                  <Users size={14} className="text-primary" /> Team: {detailProject.team} {detailProject.supervisor ? `· Supervisor: ${detailProject.supervisor}` : ''}
+                </div>
+                <h2 className="text-3xl font-space font-bold text-foreground">{detailProject.title}</h2>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-2">Project Abstract & Details</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {detailProject.description || 'Breakthrough fabrication project developed using BRAC University FabLab prototyping tools and precision machinery.'}
+                </p>
+              </div>
+
+              {/* Technologies Used */}
+              {detailProject.tech && Array.isArray(detailProject.tech) && detailProject.tech.length > 0 && (
+                <div className="border-t border-border pt-6">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-3">Technologies & Hardware Stack</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {detailProject.tech.map((t: string) => (
+                      <span key={t} className="px-3 py-1.5 text-xs font-mono bg-muted/60 text-foreground border border-border">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="p-6 bg-muted/30 border-t border-border flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDetailProject(null)}
+                className="px-6 py-3 text-sm font-space font-medium border border-border hover:bg-muted transition-colors text-foreground"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

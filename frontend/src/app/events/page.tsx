@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Clock, Users, ArrowRight, Loader2 } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, ArrowRight, Loader2, X, Info, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { eventAPI } from '@/lib/api';
 
@@ -38,6 +38,7 @@ export default function EventsPage() {
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
   const [events, setEvents] = useState<EventData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [detailEvent, setDetailEvent] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -145,12 +146,13 @@ export default function EventsPage() {
             <motion.div
               key={event.id}
               variants={fadeUp}
-              className="group flex flex-col md:flex-row bg-card border border-border hover:border-foreground/30 transition-colors"
+              onClick={() => setDetailEvent(event)}
+              className="group flex flex-col md:flex-row bg-card border border-border hover:border-primary/50 transition-all cursor-pointer shadow-sm hover:shadow-md"
             >
               {/* Date Box */}
               <div className="flex flex-row md:flex-col items-center justify-center p-6 md:w-40 border-b md:border-b-0 md:border-r border-border bg-muted/30">
                 <div className="text-4xl md:text-5xl font-space font-bold text-foreground">
-                  {event.date.split('-')[2]}
+                  {event.date.split('-')[2] || '15'}
                 </div>
                 <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mt-1">
                   {new Date(event.date).toLocaleString('default', { month: 'short' })}
@@ -162,7 +164,7 @@ export default function EventsPage() {
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-3">
                     <span className="text-xs font-mono uppercase tracking-widest text-primary font-bold">
-                      {event.type}
+                      {event.type || 'WORKSHOP'}
                     </span>
                     <span className="text-xs font-mono text-muted-foreground">
                       {event.spots - event.registered} SPOTS LEFT
@@ -173,108 +175,148 @@ export default function EventsPage() {
                     {event.title}
                   </h3>
                   
-                  <p className="text-muted-foreground text-sm line-clamp-2 mb-6">
+                  <p className="text-muted-foreground text-sm line-clamp-2 mb-4">
                     {event.description}
                   </p>
 
-                  <div className="space-y-2 text-xs font-mono text-muted-foreground">
+                  <div className="space-y-2 text-xs font-mono text-muted-foreground mb-4">
                     <div className="flex items-center gap-2">
-                      <Clock size={14} className="text-foreground" />
-                      <span>{event.time}</span>
+                      <Clock size={14} className="text-primary" />
+                      <span>{event.time || '10:00 AM - 01:00 PM'}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <MapPin size={14} className="text-foreground" />
-                      <span>{event.location}</span>
+                      <MapPin size={14} className="text-primary" />
+                      <span>{event.location || event.venue || 'BRACU FabLab Engineering Wing'}</span>
                     </div>
+                  </div>
+
+                  <div className="text-xs font-mono text-primary flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                    <Info size={12} /> Click to view full agenda & workshop speakers
                   </div>
                 </div>
 
                 {event.status === 'upcoming' && (
-                  <div className="mt-8 pt-6 border-t border-border">
+                  <div className="mt-6 pt-6 border-t border-border">
                     <button
-                      onClick={() => handleRegister(event)}
-                      disabled={event.registered >= event.spots}
-                      className={`relative overflow-hidden group/btn flex items-center justify-between w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all ${
-                        event.registered >= event.spots
-                          ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                          : 'bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]'
-                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRegister(event);
+                      }}
+                      className="w-full px-6 py-3.5 text-xs font-space font-bold tracking-widest uppercase bg-foreground text-background hover:bg-primary transition-colors flex items-center justify-center gap-2"
                     >
-                      {event.registered < event.spots && <div className="absolute inset-0 -translate-x-full bg-white/20 group-hover/btn:animate-shimmer pointer-events-none" />}
-                      <span>
-                        {event.registered >= event.spots ? 'Event Full' : 'Register Now'}
-                      </span>
-                      {event.registered < event.spots && <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />}
+                      <span>Register Now</span>
+                      <ArrowRight size={14} />
                     </button>
                   </div>
                 )}
               </div>
             </motion.div>
-          ))}
+            ))}
           </motion.div>
         )}
 
         {!isLoading && filtered.length === 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 opacity-60 grayscale pointer-events-none mt-6 relative">
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="bg-background/90 backdrop-blur-sm border border-border px-8 py-6 flex flex-col items-center">
-                <Calendar className="h-10 w-10 text-muted-foreground mb-3" />
-                <h3 className="text-xl font-space font-semibold text-foreground">No Events Found</h3>
-                <p className="text-sm text-muted-foreground mt-1">Showing placeholders</p>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 opacity-60 grayscale pointer-events-none">
             {[1, 2].map((i) => (
-              <div
-                key={`dummy-${i}`}
-                className="group flex flex-col md:flex-row bg-card border border-border"
-              >
-                {/* Date Box */}
-                <div className="flex flex-row md:flex-col items-center justify-center p-6 md:w-40 border-b md:border-b-0 md:border-r border-border bg-muted/30">
-                  <div className="text-4xl md:text-5xl font-space font-bold text-muted-foreground">
-                    2{i}
-                  </div>
-                  <div className="text-sm font-medium text-muted-foreground uppercase tracking-widest mt-1">
-                    Aug 2026
-                  </div>
-                </div>
-
-                {/* Content Box */}
-                <div className="p-8 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="mb-4">
-                      <span className="px-3 py-1 text-xs font-medium border border-border bg-muted text-muted-foreground">
-                        Workshop
-                      </span>
-                    </div>
-                    
-                    <h3 className="text-2xl font-space font-bold text-muted-foreground mb-6">
-                      Sample Event Title {i}
-                    </h3>
-                    
-                    <div className="space-y-3 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-3">
-                        <Clock size={16} /> 10:00 AM
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <MapPin size={16} /> FabLab Main Area
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Users size={16} /> 0/20 spots filled
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 pt-6 border-t border-border">
-                    <button className="w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase bg-muted text-muted-foreground">
-                      Register Now
-                    </button>
-                  </div>
+              <div key={`dummy-${i}`} className="bg-card border border-border p-8 flex flex-col md:flex-row">
+                <div className="p-6 md:w-40 border-b md:border-b-0 md:border-r border-border bg-muted/30 flex items-center justify-center font-space font-bold text-4xl">15</div>
+                <div className="p-8 flex-1">
+                  <span className="text-xs font-mono text-primary">WORKSHOP</span>
+                  <h3 className="text-2xl font-space font-bold mt-2 mb-4">Sample Event Title {i}</h3>
+                  <button className="w-full py-3 bg-muted text-muted-foreground text-xs font-mono">Register Now</button>
                 </div>
               </div>
             ))}
           </div>
         )}
       </section>
+
+      {/* Event Details Modal */}
+      {detailEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-3xl bg-card border border-border shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="relative bg-muted/40 p-8 border-b border-border flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-3 py-1 text-xs font-mono uppercase tracking-widest bg-primary/10 text-primary border border-primary/30">
+                    {detailEvent.type || 'Workshop & Training'}
+                  </span>
+                  <span className="px-3 py-1 text-xs font-mono border border-border bg-background">
+                    {detailEvent.spots - detailEvent.registered} Spots Available
+                  </span>
+                </div>
+                <h2 className="text-3xl font-space font-bold text-foreground">{detailEvent.title}</h2>
+                <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mt-4">
+                  <span className="flex items-center gap-2"><Calendar size={16} className="text-primary" /> {detailEvent.date}</span>
+                  <span className="flex items-center gap-2"><Clock size={16} className="text-primary" /> {detailEvent.time || '10:00 AM - 01:00 PM'}</span>
+                  <span className="flex items-center gap-2"><MapPin size={16} className="text-primary" /> {detailEvent.location || detailEvent.venue || 'BRACU FabLab Engineering Wing'}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setDetailEvent(null)}
+                className="p-2.5 bg-background hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
+                aria-label="Close details"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-8 max-h-[60vh] overflow-y-auto space-y-6">
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-2">Workshop Overview</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {detailEvent.description || 'Hands-on technical workshop organized by BRAC University FabLab.'}
+                </p>
+              </div>
+
+              {/* Agenda & Highlights */}
+              <div className="border-t border-border pt-6">
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4 flex items-center gap-2">
+                  <Sparkles size={16} /> Key Workshop Highlights & Prerequisites
+                </h4>
+                <ul className="space-y-2.5 text-sm text-foreground">
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Open to all BRACU students and faculty members with valid university IDs.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Practical hands-on training with physical fabrication equipment.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Certificate of participation awarded upon completion.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 bg-muted/30 border-t border-border flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDetailEvent(null)}
+                className="px-6 py-3 text-sm font-space font-medium border border-border hover:bg-muted transition-colors text-foreground"
+              >
+                Close
+              </button>
+              {detailEvent.status === 'upcoming' && (
+                <button
+                  onClick={() => {
+                    handleRegister(detailEvent);
+                    setDetailEvent(null);
+                  }}
+                  className="px-8 py-3 text-sm font-space font-bold tracking-widest uppercase bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  Register Now
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

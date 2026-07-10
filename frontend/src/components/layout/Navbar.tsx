@@ -59,26 +59,35 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center space-x-8">
-            {links.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === link.href ? 'text-foreground' : 'text-muted-foreground'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+            {links.map((link) => {
+              const isActive = pathname === link.href || (link.href !== '/' && pathname?.startsWith(link.href));
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`relative py-2 text-sm font-medium transition-colors hover:text-primary ${
+                    isActive ? 'text-foreground font-bold' : 'text-muted-foreground'
+                  }`}
+                >
+                  {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbar-indicator"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+                    />
+                  )}
+                </Link>
+              );
+            })}
             
             <div className="h-4 w-px bg-border" />
             
             <Link 
               href={isAuthenticated ? "/dashboard" : "/login"}
-              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+              className="flex items-center gap-2 text-sm font-medium px-4 py-2 border border-border hover:border-primary bg-muted/40 hover:bg-primary/10 text-foreground hover:text-primary transition-all"
             >
-              <User size={16} />
-              {isAuthenticated ? 'Dashboard' : 'Sign In'}
+              <User size={15} />
+              <span>{isAuthenticated ? 'Dashboard' : 'Sign In'}</span>
             </Link>
           </nav>
 
