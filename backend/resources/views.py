@@ -24,6 +24,7 @@ class ResourceCategoryListView(generics.ListAPIView):
 class ResourceListView(generics.ListCreateAPIView):
     queryset = Resource.objects.select_related("category").all()
     permission_classes = [ReadOnlyOrAdmin]
+    pagination_class = None
     filterset_fields = ["category", "resource_type"]
     search_fields = ["title", "description"]
     ordering_fields = ["created_at", "download_count", "title"]

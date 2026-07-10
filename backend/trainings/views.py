@@ -17,6 +17,7 @@ class TrainingCourseListView(generics.ListAPIView):
     queryset = TrainingCourse.objects.all()
     serializer_class = TrainingCourseListSerializer
     permission_classes = [permissions.AllowAny]
+    pagination_class = None
     filterset_fields = ["category", "is_required"]
     search_fields = ["title", "description"]
 

@@ -20,6 +20,7 @@ class ProjectCategoryListView(generics.ListAPIView):
 
 class ProjectListView(generics.ListCreateAPIView):
     permission_classes = [ReadOnlyOrAdmin]
+    pagination_class = None
     filterset_fields = ["category", "status", "is_featured"]
     search_fields = ["title", "description", "technologies"]
     ordering_fields = ["created_at", "title"]

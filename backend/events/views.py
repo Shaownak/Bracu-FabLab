@@ -16,6 +16,7 @@ from .serializers import (
 class EventListView(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     permission_classes = [ReadOnlyOrAdmin]
+    pagination_class = None
     filterset_fields = ["event_type", "status", "is_featured"]
     search_fields = ["title", "description", "venue"]
     ordering_fields = ["date", "created_at"]

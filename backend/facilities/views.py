@@ -27,6 +27,7 @@ class EquipmentCategoryListView(generics.ListAPIView):
 class EquipmentListView(generics.ListCreateAPIView):
     queryset = Equipment.objects.select_related("category").prefetch_related("images")
     permission_classes = [ReadOnlyOrAdmin]
+    pagination_class = None
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ["category", "status", "requires_training", "is_featured"]
     search_fields = ["name", "description", "location"]
