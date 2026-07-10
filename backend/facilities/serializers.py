@@ -34,6 +34,7 @@ class EquipmentCategorySerializer(serializers.ModelSerializer):
 class EquipmentListSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source="category.name", read_only=True)
     primary_image = serializers.SerializerMethodField()
+    images = EquipmentImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Equipment
@@ -49,7 +50,10 @@ class EquipmentListSerializer(serializers.ModelSerializer):
             "requires_training",
             "primary_image",
             "image",
+            "images",
             "description",
+            "specifications",
+            "hourly_rate",
         ]
 
     def get_primary_image(self, obj):

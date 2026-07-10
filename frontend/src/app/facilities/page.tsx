@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Search, Filter, Printer, Layers, Cog, Bot, CircuitBoard, MapPin, Clock, CheckCircle, Wrench, ArrowRight, Loader2 } from 'lucide-react';
+import { Search, Filter, Printer, Layers, Cog, Bot, CircuitBoard, MapPin, Clock, CheckCircle, Wrench, ArrowRight, Loader2, X, Info, ExternalLink, Sliders } from 'lucide-react';
 import Image from 'next/image';
 import BookingModal from '@/components/booking/BookingModal';
 import { useAuthStore } from '@/stores/auth';
@@ -46,6 +46,7 @@ export default function FacilitiesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState<{id: string, name: string} | null>(null);
+  const [detailEquipment, setDetailEquipment] = useState<any | null>(null);
   
   const { isAuthenticated } = useAuthStore();
   const router = useRouter();
@@ -179,46 +180,64 @@ export default function FacilitiesPage() {
               return (
                 <div
                   key={item.id || i}
-                  className="group flex flex-col justify-between bg-card p-0 border border-border hover:border-foreground/30 transition-colors overflow-hidden"
+                  onClick={() => setDetailEquipment(item)}
+                  className="group flex flex-col justify-between bg-card p-0 border border-border hover:border-primary/50 transition-all cursor-pointer overflow-hidden shadow-sm hover:shadow-md"
                 >
                   <div>
-                    {/* Image section */}
-                    <div className="relative w-full h-48 bg-muted border-b border-border overflow-hidden">
+                    {/* Image section with auto-adjust aspect & ambient blur */}
+                    <div className="relative w-full aspect-[16/10] bg-muted/40 border-b border-border overflow-hidden flex items-center justify-center">
                       {item.image || item.primary_image?.image ? (
-                        <Image
-                          src={resolveImageUrl(item.image || item.primary_image?.image)}
-                          alt={item.name || 'Equipment'}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
+                        <>
+                          <Image
+                            src={resolveImageUrl(item.image || item.primary_image?.image)}
+                            alt=""
+                            fill
+                            className="object-cover blur-2xl opacity-30 scale-125 pointer-events-none"
+                          />
+                          <Image
+                            src={resolveImageUrl(item.image || item.primary_image?.image)}
+                            alt={item.name || 'Equipment'}
+                            fill
+                            className="object-contain p-3 transition-transform duration-700 group-hover:scale-105 z-10"
+                          />
+                        </>
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-muted-foreground transition-transform duration-700 group-hover:scale-105">
                           <Layers size={48} className="opacity-20" />
                         </div>
                       )}
-                      <div className="absolute top-4 right-4 z-10">
+                      <div className="absolute top-4 right-4 z-20">
                         <span className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium border shadow-sm backdrop-blur-md ${status.colorClass}`}>
                           <status.icon size={12} />
                           {status.label}
                         </span>
                       </div>
+                      <div className="absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono bg-background/90 text-foreground border border-border shadow-sm backdrop-blur-md">
+                          <Info size={12} className="text-primary" /> Click to view full specs
+                        </span>
+                      </div>
                     </div>
 
                     <div className="p-6">
-                      <h3 className="text-2xl font-space font-bold text-foreground mb-3 line-clamp-1">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-6 line-clamp-3 leading-relaxed">
+                      <h3 className="text-2xl font-space font-bold text-foreground mb-3 line-clamp-1 group-hover:text-primary transition-colors">{item.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
                         {item.description || 'No detailed description available for this equipment.'}
                       </p>
                     </div>
                   </div>
 
                   <div className="px-6 pb-6 mt-auto">
-                    <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-6">
-                      <MapPin size={14} /> {item.location || 'FabLab'}
+                    <div className="flex items-center justify-between text-xs font-medium text-muted-foreground mb-4">
+                      <span className="flex items-center gap-1.5"><MapPin size={14} /> {item.location || 'FabLab'}</span>
+                      <span className="text-primary hover:underline flex items-center gap-1">Details & Specs <ExternalLink size={12} /></span>
                     </div>
                     
                     <button
-                      onClick={() => handleBook(item)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBook(item);
+                      }}
                       disabled={item.status !== 'available'}
                       className={`relative overflow-hidden group/btn flex items-center justify-between w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all ${
                         item.status === 'available'
@@ -287,6 +306,133 @@ export default function FacilitiesPage() {
           </div>
         )}
       </section>
+
+      {/* Equipment Detail Modal */}
+      {detailEquipment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md overflow-y-auto">
+          <div className="relative w-full max-w-3xl bg-card border border-border shadow-2xl overflow-hidden my-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header & Auto-Adjust Photo */}
+            <div className="relative w-full aspect-[16/9] bg-muted/40 border-b border-border overflow-hidden flex items-center justify-center">
+              {detailEquipment.image || detailEquipment.primary_image?.image ? (
+                <>
+                  <Image
+                    src={resolveImageUrl(detailEquipment.image || detailEquipment.primary_image?.image)}
+                    alt=""
+                    fill
+                    className="object-cover blur-3xl opacity-30 scale-125 pointer-events-none"
+                  />
+                  <Image
+                    src={resolveImageUrl(detailEquipment.image || detailEquipment.primary_image?.image)}
+                    alt={detailEquipment.name || 'Equipment'}
+                    fill
+                    className="object-contain p-4 z-10"
+                  />
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center text-muted-foreground">
+                  <Layers size={64} className="opacity-20 mb-2" />
+                  <span className="text-xs font-mono">No Image Uploaded</span>
+                </div>
+              )}
+
+              <button
+                onClick={() => setDetailEquipment(null)}
+                className="absolute top-4 right-4 z-30 p-2.5 bg-background/80 hover:bg-background text-foreground border border-border shadow-md transition-colors"
+                aria-label="Close details"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="absolute bottom-4 left-4 z-20 flex flex-wrap gap-2">
+                <span className="px-3 py-1 text-xs font-mono font-bold bg-background/90 text-primary border border-border shadow-sm backdrop-blur-md uppercase">
+                  {detailEquipment.category_name || 'Equipment'}
+                </span>
+                <span className={`px-3 py-1 text-xs font-medium border shadow-sm backdrop-blur-md ${
+                  detailEquipment.status === 'available' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-500' : 'border-amber-500/30 bg-amber-500/10 text-amber-500'
+                }`}>
+                  {detailEquipment.status === 'available' ? 'Available for Booking' : detailEquipment.status === 'in_use' ? 'Currently In Use' : 'Under Maintenance'}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-8 max-h-[60vh] overflow-y-auto space-y-6">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground mb-2">
+                  <MapPin size={14} className="text-primary" /> {detailEquipment.location || 'FabLab Main Floor'}
+                </div>
+                <h2 className="text-3xl font-space font-bold text-foreground">{detailEquipment.name}</h2>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-2">Overview & Description</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {detailEquipment.description || 'No detailed description provided.'}
+                </p>
+              </div>
+
+              {/* Technical Specifications */}
+              {detailEquipment.specifications && typeof detailEquipment.specifications === 'object' && Object.keys(detailEquipment.specifications).length > 0 && (
+                <div className="border-t border-border pt-6">
+                  <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold mb-4 flex items-center gap-2">
+                    <Sliders size={14} /> Technical Specifications
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-muted/30 p-4 border border-border">
+                    {Object.entries(detailEquipment.specifications).map(([key, val]) => (
+                      <div key={key} className="flex flex-col border-b border-border/50 pb-2 last:border-b-0">
+                        <span className="text-xs font-mono text-muted-foreground capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="text-sm font-medium text-foreground">{String(val)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Requirements & Rates */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-border pt-6">
+                <div className="p-4 bg-muted/40 border border-border">
+                  <span className="text-xs font-mono text-muted-foreground block mb-1">Training Requirement</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    {detailEquipment.requires_training ? 'Safety Training & Certification Required' : 'Open Access / Standard Safety Rules'}
+                  </span>
+                </div>
+                <div className="p-4 bg-muted/40 border border-border">
+                  <span className="text-xs font-mono text-muted-foreground block mb-1">Usage Rate</span>
+                  <span className="text-sm font-semibold text-foreground">
+                    {detailEquipment.hourly_rate ? `BDT ${detailEquipment.hourly_rate} / hour` : 'Free for BRACU Academic Projects'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="p-6 bg-muted/30 border-t border-border flex flex-col sm:flex-row items-center justify-end gap-3">
+              <button
+                onClick={() => setDetailEquipment(null)}
+                className="w-full sm:w-auto px-6 py-3 text-sm font-space font-medium border border-border hover:bg-muted transition-colors text-foreground"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  const target = detailEquipment;
+                  setDetailEquipment(null);
+                  handleBook(target);
+                }}
+                disabled={detailEquipment.status !== 'available'}
+                className={`w-full sm:w-auto px-8 py-3 text-sm font-space font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2 ${
+                  detailEquipment.status === 'available'
+                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+              >
+                <span>{detailEquipment.status === 'available' ? 'Book This Machine' : 'Unavailable'}</span>
+                {detailEquipment.status === 'available' && <ArrowRight size={16} />}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <BookingModal 
         isOpen={isModalOpen} 
