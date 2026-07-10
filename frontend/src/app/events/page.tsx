@@ -8,11 +8,14 @@ import { eventAPI } from '@/lib/api';
 
 interface EventData {
   id: string;
+  slug?: string;
   title: string;
-  type: string;
+  description?: string;
+  type?: string;
   date: string;
-  time: string;
-  venue: string;
+  time?: string;
+  venue?: string;
+  location?: string;
   spots: number;
   registered: number;
   status: 'upcoming' | 'completed';
@@ -53,6 +56,15 @@ export default function EventsPage() {
     fetchEvents();
   }, []);
 
+  const handleRegister = async (event: any) => {
+    try {
+      await eventAPI.register(event.id || event.slug);
+      alert(`Successfully registered for ${event.title}!`);
+    } catch (error: any) {
+      alert(error.response?.data?.detail || 'Registration failed or you are already registered.');
+    }
+  };
+
   const filtered = events.filter((e) => tab === 'upcoming' ? e.status === 'upcoming' : e.status === 'completed');
 
   return (
@@ -69,32 +81,25 @@ export default function EventsPage() {
           <Image src="/images/project_drone.png" alt="Events" fill className="object-cover opacity-20 mix-blend-luminosity" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/20" />
         </motion.div>
-        <div className="relative z-10 max-w-2xl">
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
-            className="text-5xl md:text-7xl font-space font-bold tracking-tighter text-foreground mb-6"
-          >
-            Workshops & <br />
-            <span className="text-primary">Events.</span>
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-            className="text-lg md:text-xl text-muted-foreground font-light"
-          >
-            Join our masterclasses, hackathons, and guest lectures to enhance your fabrication and engineering skills.
-          </motion.p>
+        
+        <div className="relative z-10 max-w-2xl px-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-xs font-mono uppercase tracking-widest mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            WORKSHOPS & MASTERCLASSES
+          </div>
+          <h1 className="text-4xl sm:text-6xl font-space font-bold text-foreground tracking-tight mb-4">
+            Hands-On <span className="text-primary underline decoration-primary/30 underline-offset-8">Events</span>
+          </h1>
+          <p className="text-muted-foreground text-lg font-light leading-relaxed">
+            Join practical workshops led by BRACU FabLab engineering staff and visiting industry experts.
+          </p>
         </div>
       </section>
 
       {/* FILTER TABS */}
       <motion.section 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] as const }}
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12"
       >
         <div className="flex border-b border-border">
@@ -138,35 +143,41 @@ export default function EventsPage() {
               {/* Date Box */}
               <div className="flex flex-row md:flex-col items-center justify-center p-6 md:w-40 border-b md:border-b-0 md:border-r border-border bg-muted/30">
                 <div className="text-4xl md:text-5xl font-space font-bold text-foreground">
-                  {new Date(event.date).getDate()}
+                  {event.date.split('-')[2]}
                 </div>
-                <div className="text-sm font-medium text-muted-foreground uppercase tracking-widest mt-1">
-                  {new Date(event.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                <div className="text-xs font-mono uppercase tracking-widest text-muted-foreground mt-1">
+                  {new Date(event.date).toLocaleString('default', { month: 'short' })}
                 </div>
               </div>
 
-              {/* Content Box */}
+              {/* Event Content */}
               <div className="p-8 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="mb-4">
-                    <span className="px-3 py-1 text-xs font-medium border border-border bg-muted text-foreground">
+                  <div className="flex items-center justify-between gap-4 mb-3">
+                    <span className="text-xs font-mono uppercase tracking-widest text-primary font-bold">
                       {event.type}
                     </span>
+                    <span className="text-xs font-mono text-muted-foreground">
+                      {event.spots - event.registered} SPOTS LEFT
+                    </span>
                   </div>
-                  
-                  <h3 className="text-2xl font-space font-bold text-foreground mb-6 group-hover:text-primary transition-colors">
+
+                  <h3 className="text-2xl font-space font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
                     {event.title}
                   </h3>
                   
-                  <div className="space-y-3 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-3">
-                      <Clock size={16} className="text-foreground" /> {event.time}
+                  <p className="text-muted-foreground text-sm line-clamp-2 mb-6">
+                    {event.description}
+                  </p>
+
+                  <div className="space-y-2 text-xs font-mono text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Clock size={14} className="text-foreground" />
+                      <span>{event.time}</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin size={16} className="text-foreground" /> {event.venue}
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Users size={16} className="text-foreground" /> {event.registered}/{event.spots} spots filled
+                    <div className="flex items-center gap-2">
+                      <MapPin size={14} className="text-foreground" />
+                      <span>{event.location}</span>
                     </div>
                   </div>
                 </div>
@@ -174,6 +185,7 @@ export default function EventsPage() {
                 {event.status === 'upcoming' && (
                   <div className="mt-8 pt-6 border-t border-border">
                     <button
+                      onClick={() => handleRegister(event)}
                       disabled={event.registered >= event.spots}
                       className={`relative overflow-hidden group/btn flex items-center justify-between w-full px-6 py-4 text-sm font-space font-bold tracking-widest uppercase transition-all ${
                         event.registered >= event.spots

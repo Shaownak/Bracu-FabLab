@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { equipmentAPI, projectAPI, eventAPI, resourceAPI, trainingAPI } from '@/lib/api';
+import { equipmentAPI, projectAPI, eventAPI, resourceAPI, trainingAPI, bookingAPI } from '@/lib/api';
 import EditModal, { EditField } from './EditModal';
-import { Edit, Trash2, Plus, RefreshCw } from 'lucide-react';
+import { Edit, Trash2, Plus, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 
-type AdminModule = 'equipment' | 'projects' | 'events' | 'resources' | 'trainings';
+type AdminModule = 'equipment' | 'projects' | 'events' | 'resources' | 'trainings' | 'bookings';
 
 const MODULES: { id: AdminModule; label: string }[] = [
   { id: 'equipment', label: 'Equipment' },
@@ -13,6 +13,7 @@ const MODULES: { id: AdminModule; label: string }[] = [
   { id: 'events', label: 'Events' },
   { id: 'resources', label: 'Resources' },
   { id: 'trainings', label: 'Trainings' },
+  { id: 'bookings', label: 'Bookings' },
 ];
 
 export default function AdminManager() {
@@ -49,6 +50,9 @@ export default function AdminManager() {
           break;
         case 'trainings': 
           res = await trainingAPI.listCourses(); 
+          break;
+        case 'bookings':
+          res = await bookingAPI.list();
           break;
       }
       setItems(res?.data?.results || res?.data || []);
@@ -133,11 +137,16 @@ export default function AdminManager() {
     } else if (activeModule === 'trainings') {
       fields = [
         { name: 'title', label: 'Course Title', type: 'text' },
-        { name: 'difficulty', label: 'Difficulty', type: 'select', options: [
-            { label: 'Beginner', value: 'beginner' },
-            { label: 'Intermediate', value: 'intermediate' },
-            { label: 'Advanced', value: 'advanced' },
+        { name: 'category', label: 'Category', type: 'select', options: [
+            { label: 'Lab Safety', value: 'safety' },
+            { label: '3D Printing', value: '3d_printing' },
+            { label: 'Laser Cutter Operation', value: 'laser' },
+            { label: 'CNC Operation', value: 'cnc' },
+            { label: 'Electronics Prototyping', value: 'electronics' },
+            { label: 'PCB Fabrication', value: 'pcb' },
+            { label: 'Robotics', value: 'robotics' },
         ]},
+        { name: 'duration_hours', label: 'Duration (Hours)', type: 'number' },
         { name: 'thumbnail', label: 'Course Thumbnail', type: 'file' },
         { name: 'description', label: 'Description', type: 'textarea' },
       ];
@@ -213,6 +222,30 @@ export default function AdminManager() {
     } catch (error) {
       console.error('Delete failed:', error);
       alert('Failed to delete item.');
+    }
+  };
+
+  const handleApproveBooking = async (item: any) => {
+    try {
+      await bookingAPI.approve(item.id, 'Approved by Admin');
+      alert('Booking approved successfully!');
+      fetchItems(activeModule);
+    } catch (error) {
+      console.error('Booking approval failed:', error);
+      alert('Failed to approve booking.');
+    }
+  };
+
+  const handleRejectBooking = async (item: any) => {
+    const reason = window.prompt('Enter rejection reason (optional):', 'Schedule conflict');
+    if (reason === null) return;
+    try {
+      await bookingAPI.reject(item.id, reason);
+      alert('Booking rejected.');
+      fetchItems(activeModule);
+    } catch (error) {
+      console.error('Booking rejection failed:', error);
+      alert('Failed to reject booking.');
     }
   };
 
@@ -295,12 +328,32 @@ export default function AdminManager() {
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="p-2 bg-background border border-border hover:border-primary text-foreground hover:text-primary transition-colors"
-                      >
-                        <Edit size={16} />
-                      </button>
+                      {activeModule === 'bookings' && item.status === 'pending' && (
+                        <>
+                          <button
+                            onClick={() => handleApproveBooking(item)}
+                            title="Approve Booking"
+                            className="p-2 bg-background border border-border hover:border-emerald-500 text-foreground hover:text-emerald-500 transition-colors"
+                          >
+                            <CheckCircle size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleRejectBooking(item)}
+                            title="Reject Booking"
+                            className="p-2 bg-background border border-border hover:border-red-500 text-foreground hover:text-red-500 transition-colors"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </>
+                      )}
+                      {activeModule !== 'bookings' && (
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="p-2 bg-background border border-border hover:border-primary text-foreground hover:text-primary transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(item)}
                         className="p-2 bg-background border border-border hover:border-red-500 text-foreground hover:text-red-500 transition-colors"

@@ -252,16 +252,171 @@ export default function DashboardPage() {
               </motion.div>
             )}
 
-            {activeTab !== 'overview' && activeTab !== 'admin' && (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4 }} className="bg-card border border-border p-12 text-center min-h-[400px] flex flex-col items-center justify-center relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <div className="text-muted-foreground/30 mb-6 group-hover:text-primary/50 transition-colors duration-500">
-                  {tabs.find(t => t.id === activeTab)?.icon({ size: 64, strokeWidth: 1 })}
+            {activeTab === 'bookings' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border p-8">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                  <div>
+                    <h2 className="text-xl font-space font-bold text-foreground">My Equipment Bookings</h2>
+                    <p className="text-sm text-muted-foreground">Manage your lab reservations and machine access times.</p>
+                  </div>
+                  <Link href="/facilities" className="px-4 py-2 bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors">
+                    + Book New Machine
+                  </Link>
                 </div>
-                <h2 className="text-2xl font-space font-bold text-foreground mb-3 capitalize">{activeTab} Interface</h2>
-                <p className="text-muted-foreground max-w-md mx-auto relative z-10">
-                  This highly specialized dashboard module is currently being finalized. Check back soon for updates.
-                </p>
+                {dashboardData.recentBookings.length > 0 ? (
+                  <div className="space-y-4">
+                    {dashboardData.recentBookings.map((booking: any) => (
+                      <div key={booking.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-border bg-background gap-4">
+                        <div>
+                          <h4 className="font-semibold text-foreground text-lg">{booking.equipment_name}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Date: {formatDate(booking.date)} · Time: {formatTime(booking.start_time)} - {formatTime(booking.end_time)}
+                          </p>
+                          {booking.purpose && <p className="text-xs text-muted-foreground mt-1">Purpose: {booking.purpose}</p>}
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className={`px-3 py-1 text-xs font-medium uppercase tracking-wider border ${
+                            booking.status === 'approved' ? 'border-emerald-500/50 text-emerald-500 bg-emerald-500/10' :
+                            booking.status === 'pending' ? 'border-amber-500/50 text-amber-500 bg-amber-500/10' :
+                            'border-red-500/50 text-red-500 bg-red-500/10'
+                          }`}>
+                            {booking.status}
+                          </span>
+                          {booking.status === 'pending' && (
+                            <button
+                              onClick={async () => {
+                                if (window.confirm('Cancel this booking?')) {
+                                  try {
+                                    await bookingAPI.cancel(booking.id);
+                                    alert('Booking cancelled');
+                                    window.location.reload();
+                                  } catch (e) {
+                                    alert('Failed to cancel booking');
+                                  }
+                                }
+                              }}
+                              className="px-3 py-1 text-xs border border-red-500/40 text-red-500 hover:bg-red-500/10 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-16 border border-dashed border-border">
+                    <Calendar className="mx-auto h-10 w-10 text-muted-foreground/50 mb-3" />
+                    <p className="text-muted-foreground mb-4">You have no equipment reservations yet.</p>
+                    <Link href="/facilities" className="inline-flex px-6 py-2 bg-foreground text-background text-sm font-medium">
+                      Browse Facilities
+                    </Link>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'projects' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border p-8">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                  <div>
+                    <h2 className="text-xl font-space font-bold text-foreground">My Research Projects</h2>
+                    <p className="text-sm text-muted-foreground">Showcase your BRACU FabLab engineering works.</p>
+                  </div>
+                  <Link href="/projects" className="px-4 py-2 bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors">
+                    Browse Showcase
+                  </Link>
+                </div>
+                <div className="text-center py-16 border border-dashed border-border">
+                  <FolderGit2 className="mx-auto h-10 w-10 text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground mb-4">Want to publish your hardware project in the official showcase?</p>
+                  <Link href="/projects" className="inline-flex px-6 py-2 bg-foreground text-background text-sm font-medium">
+                    Explore Projects
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'events' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border p-8">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                  <div>
+                    <h2 className="text-xl font-space font-bold text-foreground">Registered Events & Workshops</h2>
+                    <p className="text-sm text-muted-foreground">Your upcoming masterclasses and hackathons.</p>
+                  </div>
+                  <Link href="/events" className="px-4 py-2 bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors">
+                    Browse All Events
+                  </Link>
+                </div>
+                {dashboardData.upcomingEvents.length > 0 ? (
+                  <div className="space-y-4">
+                    {dashboardData.upcomingEvents.map((event: any) => (
+                      <div key={event.id} className="p-5 border border-border bg-background flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold text-foreground">{event.title}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{formatDate(event.date)} · {event.venue}</p>
+                        </div>
+                        <span className="px-3 py-1 text-xs border border-primary/40 text-primary bg-primary/10 uppercase">Registered</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-16 border border-dashed border-border">
+                    <BookOpen className="mx-auto h-10 w-10 text-muted-foreground/50 mb-3" />
+                    <p className="text-muted-foreground mb-4">You have not registered for any upcoming workshops.</p>
+                    <Link href="/events" className="inline-flex px-6 py-2 bg-foreground text-background text-sm font-medium">
+                      View Event Calendar
+                    </Link>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'certifications' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border p-8">
+                <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                  <div>
+                    <h2 className="text-xl font-space font-bold text-foreground">Safety & Equipment Certifications</h2>
+                    <p className="text-sm text-muted-foreground">Certificates required for machine operation.</p>
+                  </div>
+                  <Link href="/trainings" className="px-4 py-2 bg-foreground text-background text-sm font-medium hover:bg-foreground/90 transition-colors">
+                    Take Safety Courses
+                  </Link>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-6 border border-emerald-500/30 bg-emerald-500/5">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-mono uppercase text-emerald-500 font-bold">VERIFIED CERTIFICATE</span>
+                      <Award className="text-emerald-500" size={20} />
+                    </div>
+                    <h4 className="font-bold text-foreground text-lg mb-1">FabLab Mandatory Safety Orientation</h4>
+                    <p className="text-sm text-muted-foreground mb-4">Issued by BRAC University FabLab Safety Committee</p>
+                    <Link href="/certifications" className="text-sm font-medium text-primary hover:underline">
+                      Verify & Download Certificate &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'settings' && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border p-8 max-w-2xl">
+                <h2 className="text-xl font-space font-bold text-foreground mb-2">Profile Settings</h2>
+                <p className="text-sm text-muted-foreground mb-6">Manage your BRAC University account information.</p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">Full Name</label>
+                    <input type="text" readOnly defaultValue={`${user.first_name} ${user.last_name}`} className="w-full px-4 py-2 bg-muted/40 border border-border text-foreground font-medium" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">Email Address</label>
+                    <input type="email" readOnly defaultValue={user.email} className="w-full px-4 py-2 bg-muted/40 border border-border text-foreground font-mono text-sm" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase text-muted-foreground mb-1">Role / Affiliation</label>
+                    <input type="text" readOnly defaultValue={user.role.toUpperCase()} className="w-full px-4 py-2 bg-muted/40 border border-border text-foreground font-medium" />
+                  </div>
+                </div>
               </motion.div>
             )}
 
