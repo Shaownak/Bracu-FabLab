@@ -93,113 +93,148 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BENTO GRID SECTION */}
-      <section className="py-24 bg-foreground text-background">
+      {/* 2x2 CAPABILITIES GRID SECTION */}
+      <section className="py-28 bg-background border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+            className="mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-space font-bold tracking-tight text-foreground mb-4">Core Capabilities.</h2>
+            <p className="text-xl text-muted-foreground font-light max-w-2xl">
+              State-of-the-art manufacturing equipment and prototyping labs engineered to take your ideas from concept to production.
+            </p>
+          </motion.div>
+
           <motion.div 
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-1 lg:gap-1 bg-border/20 p-1"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
-
-            {/* Bento Item 1 */}
-            <motion.div variants={fadeUp} className="lg:col-span-8 bg-foreground p-10 md:p-16 flex flex-col justify-between min-h-[400px]">
-              <div>
-                <Layers className="text-primary mb-6" size={32} />
-                <h2 className="text-3xl md:text-5xl font-space font-bold tracking-tight mb-4">Precision 3D Printing</h2>
-                <p className="text-muted-foreground text-lg max-w-md">
-                  Access industrial FDM and SLA printers capable of micrometre precision. Perfect for complex mechanical parts and rapid prototyping.
-                </p>
+            {/* Card 1: Precision 3D Printing */}
+            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+                <Image
+                  src="/images/printer.png"
+                  alt="Precision 3D Printing"
+                  fill
+                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
               </div>
-              <Link href="/facilities" className="group inline-flex items-center gap-2 text-sm font-medium mt-12 hover:text-primary transition-colors w-fit">
-                View Printers <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-
-            {/* Bento Item 2 */}
-            <motion.div variants={fadeUp} className="lg:col-span-4 bg-muted relative overflow-hidden min-h-[400px] group">
-              <Image
-                src="/images/printer.png"
-                alt="3D Printer Nozzle"
-                fill
-                className="object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
-              />
-            </motion.div>
-
-            {/* Bento Item 3 */}
-            <motion.div variants={fadeUp} className="lg:col-span-4 bg-muted relative overflow-hidden min-h-[400px] group">
-              <Image
-                src="/images/cnc.png"
-                alt="CNC Milling"
-                fill
-                className="object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
-              />
-            </motion.div>
-
-            {/* Bento Item 4 */}
-            <motion.div variants={fadeUp} className="lg:col-span-8 bg-foreground p-10 md:p-16 flex flex-col justify-between min-h-[400px]">
-              <div>
-                <Crosshair className="text-primary mb-6" size={32} />
-                <h2 className="text-3xl md:text-5xl font-space font-bold tracking-tight mb-4">Advanced CNC Machining</h2>
-                <p className="text-muted-foreground text-lg max-w-md">
-                  Mill aluminum, wood, and acrylic with our 5-axis routers. Transform raw materials into finished products.
-                </p>
+              <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Layers size={24} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                    Precision 3D Printing
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Access industrial FDM and SLA printers capable of micrometre precision. Perfect for complex mechanical parts and rapid prototyping.
+                  </p>
+                </div>
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                  <span>View Printers</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                </Link>
               </div>
-              <Link href="/facilities" className="group inline-flex items-center gap-2 text-sm font-medium mt-12 hover:text-primary transition-colors w-fit">
-                View CNC Machines <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
             </motion.div>
 
-            {/* Bento Item 5 */}
-            <motion.div variants={fadeUp} className="lg:col-span-8 bg-foreground p-10 md:p-16 flex flex-col justify-between min-h-[400px]">
-              <div>
-                <Zap className="text-primary mb-6" size={32} />
-                <h2 className="text-3xl md:text-5xl font-space font-bold tracking-tight mb-4">Electronics & Prototyping</h2>
-                <p className="text-muted-foreground text-lg max-w-md">
-                  Fully equipped workstations with oscilloscopes, soldering irons, and a vast inventory of microcontrollers and sensors.
-                </p>
+            {/* Card 2: Advanced CNC Machining */}
+            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+                <Image
+                  src="/images/cnc.png"
+                  alt="Advanced CNC Machining"
+                  fill
+                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
               </div>
-              <Link href="/facilities" className="group inline-flex items-center gap-2 text-sm font-medium mt-12 hover:text-primary transition-colors w-fit">
-                Explore Equipment <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-
-            {/* Bento Item 6 */}
-            <motion.div variants={fadeUp} className="lg:col-span-4 bg-muted relative overflow-hidden min-h-[400px] group">
-              <Image
-                src="/images/electronics.png"
-                alt="Electronics Lab Workspace"
-                fill
-                className="object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
-              />
-            </motion.div>
-
-            {/* Bento Item 7 */}
-            <motion.div variants={fadeUp} className="lg:col-span-4 bg-muted relative overflow-hidden min-h-[400px] group">
-              <Image
-                src="/images/laser.png"
-                alt="Laser Cutter"
-                fill
-                className="object-cover opacity-80 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
-              />
-            </motion.div>
-
-            {/* Bento Item 8 */}
-            <motion.div variants={fadeUp} className="lg:col-span-8 bg-foreground p-10 md:p-16 flex flex-col justify-between min-h-[400px]">
-              <div>
-                <Maximize className="text-primary mb-6" size={32} />
-                <h2 className="text-3xl md:text-5xl font-space font-bold tracking-tight mb-4">Industrial Laser Cutting</h2>
-                <p className="text-muted-foreground text-lg max-w-md">
-                  Rapidly cut and engrave wood, acrylic, leather, and more with our high-power CO2 laser cutters.
-                </p>
+              <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Crosshair size={24} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                    Advanced CNC Machining
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Mill aluminum, wood, and acrylic with our 5-axis routers. Transform raw materials into durable finished products with absolute precision.
+                  </p>
+                </div>
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                  <span>View CNC Machines</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                </Link>
               </div>
-              <Link href="/facilities" className="group inline-flex items-center gap-2 text-sm font-medium mt-12 hover:text-primary transition-colors w-fit">
-                View Laser Cutters <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
             </motion.div>
 
+            {/* Card 3: Electronics & Prototyping */}
+            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+                <Image
+                  src="/images/electronics.png"
+                  alt="Electronics & Prototyping"
+                  fill
+                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+              </div>
+              <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Zap size={24} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                    Electronics & Prototyping
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Fully equipped workstations featuring oscilloscopes, precision soldering stations, microcontrollers, and embedded sensor suites.
+                  </p>
+                </div>
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                  <span>Explore Equipment</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Card 4: Industrial Laser Cutting */}
+            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+                <Image
+                  src="/images/laser.png"
+                  alt="Industrial Laser Cutting"
+                  fill
+                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+              </div>
+              <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Maximize size={24} />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                    Industrial Laser Cutting
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Rapidly cut and engrave wood, acrylic, leather, and composites with our high-power CO2 laser systems for intricate geometric cuts.
+                  </p>
+                </div>
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                  <span>View Laser Cutters</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                </Link>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
