@@ -94,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* 2x2 CAPABILITIES GRID SECTION */}
-      <section className="py-28 bg-background border-t border-border">
+      <section className="py-28 bg-foreground text-background border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -103,8 +103,8 @@ export default function Home() {
             transition={{ duration: 0.7 }}
             className="mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-space font-bold tracking-tight text-foreground mb-4">Core Capabilities.</h2>
-            <p className="text-xl text-muted-foreground font-light max-w-2xl">
+            <h2 className="text-4xl md:text-5xl font-space font-bold tracking-tight text-background mb-4">Core Capabilities.</h2>
+            <p className="text-xl text-background/75 font-light max-w-2xl">
               State-of-the-art manufacturing equipment and prototyping labs engineered to take your ideas from concept to production.
             </p>
           </motion.div>
@@ -117,29 +117,29 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             {/* Card 1: Precision 3D Printing */}
-            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+            <motion.div variants={fadeUp} className="group bg-background/5 border border-background/15 overflow-hidden flex flex-col hover:border-primary transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-background/10">
                 <Image
                   src="/images/printer.png"
                   alt="Precision 3D Printing"
                   fill
                   className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Layers size={24} />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-background mb-3 group-hover:text-primary transition-colors">
                     Precision 3D Printing
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
+                  <p className="text-background/75 leading-relaxed mb-8">
                     Access industrial FDM and SLA printers capable of micrometre precision. Perfect for complex mechanical parts and rapid prototyping.
                   </p>
                 </div>
-                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-background group-hover:text-primary transition-colors w-fit">
                   <span>View Printers</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                 </Link>
@@ -147,29 +147,29 @@ export default function Home() {
             </motion.div>
 
             {/* Card 2: Advanced CNC Machining */}
-            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+            <motion.div variants={fadeUp} className="group bg-background/5 border border-background/15 overflow-hidden flex flex-col hover:border-primary transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-background/10">
                 <Image
                   src="/images/cnc.png"
                   alt="Advanced CNC Machining"
                   fill
                   className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Crosshair size={24} />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-background mb-3 group-hover:text-primary transition-colors">
                     Advanced CNC Machining
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
+                  <p className="text-background/75 leading-relaxed mb-8">
                     Mill aluminum, wood, and acrylic with our 5-axis routers. Transform raw materials into durable finished products with absolute precision.
                   </p>
                 </div>
-                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-background group-hover:text-primary transition-colors w-fit">
                   <span>View CNC Machines</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                 </Link>
@@ -177,29 +177,29 @@ export default function Home() {
             </motion.div>
 
             {/* Card 3: Electronics & Prototyping */}
-            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+            <motion.div variants={fadeUp} className="group bg-background/5 border border-background/15 overflow-hidden flex flex-col hover:border-primary transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-background/10">
                 <Image
                   src="/images/electronics.png"
                   alt="Electronics & Prototyping"
                   fill
                   className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Zap size={24} />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-background mb-3 group-hover:text-primary transition-colors">
                     Electronics & Prototyping
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
+                  <p className="text-background/75 leading-relaxed mb-8">
                     Fully equipped workstations featuring oscilloscopes, precision soldering stations, microcontrollers, and embedded sensor suites.
                   </p>
                 </div>
-                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-background group-hover:text-primary transition-colors w-fit">
                   <span>Explore Equipment</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                 </Link>
@@ -207,29 +207,29 @@ export default function Home() {
             </motion.div>
 
             {/* Card 4: Industrial Laser Cutting */}
-            <motion.div variants={fadeUp} className="group bg-card border border-border overflow-hidden flex flex-col hover:border-primary/60 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-muted">
+            <motion.div variants={fadeUp} className="group bg-background/5 border border-background/15 overflow-hidden flex flex-col hover:border-primary transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-background/10">
                 <Image
                   src="/images/laser.png"
                   alt="Industrial Laser Cutting"
                   fill
                   className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <Maximize size={24} />
                   </div>
-                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-2xl md:text-3xl font-space font-bold tracking-tight text-background mb-3 group-hover:text-primary transition-colors">
                     Industrial Laser Cutting
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed mb-8">
+                  <p className="text-background/75 leading-relaxed mb-8">
                     Rapidly cut and engrave wood, acrylic, leather, and composites with our high-power CO2 laser systems for intricate geometric cuts.
                   </p>
                 </div>
-                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-foreground group-hover:text-primary transition-colors w-fit">
+                <Link href="/facilities" className="inline-flex items-center gap-2 text-sm font-space font-bold uppercase tracking-widest text-background group-hover:text-primary transition-colors w-fit">
                   <span>View Laser Cutters</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                 </Link>
