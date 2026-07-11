@@ -123,9 +123,9 @@ export default function Home() {
                   src="/images/printer.png"
                   alt="Precision 3D Printing"
                   fill
-                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                  className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
@@ -153,9 +153,9 @@ export default function Home() {
                   src="/images/cnc.png"
                   alt="Advanced CNC Machining"
                   fill
-                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                  className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
@@ -183,9 +183,9 @@ export default function Home() {
                   src="/images/electronics.png"
                   alt="Electronics & Prototyping"
                   fill
-                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                  className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
@@ -213,9 +213,9 @@ export default function Home() {
                   src="/images/laser.png"
                   alt="Industrial Laser Cutting"
                   fill
-                  className="object-cover opacity-90 mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-700 group-hover:scale-105"
+                  className="object-cover transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-40" />
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-between flex-1">
                 <div>
