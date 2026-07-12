@@ -23,18 +23,12 @@
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-    
-    /* PREVIOUS ACADEMIC BLUE PALETTE (uncomment lines below & comment Electric Cyan to revert): */
-    /* --primary: 218 100% 32%; */
-    /* --accent: 218 100% 32%; */
-    
-    /* NEW ELECTRIC CYAN / BLUEPRINT TEAL PALETTE (#06B6D4): */
-    --primary: 188 86% 43%;
+    --primary: 218 100% 32%;
     --primary-foreground: 0 0% 98%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     --border: 240 5.9% 90%;
-    --accent: 188 86% 43%;
+    --accent: 218 100% 32%;
     --accent-foreground: 0 0% 98%;
   }
 
@@ -43,19 +37,13 @@
     --foreground: 0 0% 98%;
     --card: 240 10% 5%;
     --card-foreground: 0 0% 98%;
-    
-    /* PREVIOUS ACADEMIC BLUE PALETTE (uncomment lines below & comment Electric Cyan to revert): */
-    /* --primary: 218 100% 50%; */
-    /* --accent: 218 100% 50%; */
-    
-    /* NEW ELECTRIC CYAN / BLUEPRINT TEAL PALETTE (#00E5FF): */
-    --primary: 188 88% 50%;
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 218 100% 50%;
+    --primary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --border: 240 3.7% 15.9%;
-    --accent: 188 88% 50%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 218 100% 50%;
+    --accent-foreground: 0 0% 98%;
   }
 }
 
