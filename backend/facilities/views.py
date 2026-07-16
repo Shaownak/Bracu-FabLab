@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.db.models import Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from accounts.permissions import ReadOnlyOrAdmin
 from .models import EquipmentCategory, Equipment
 from .serializers import (
@@ -17,13 +20,17 @@ from .serializers import (
 )
 
 
+@method_decorator(cache_page(60 * 15), name="get")
 class EquipmentCategoryListView(generics.ListAPIView):
-    queryset = EquipmentCategory.objects.all()
+    queryset = EquipmentCategory.objects.annotate(
+        annotated_equipment_count=Count("equipment")
+    ).all()
     serializer_class = EquipmentCategorySerializer
     permission_classes = [permissions.AllowAny]
     pagination_class = None
 
 
+@method_decorator(cache_page(60 * 15), name="get")
 class EquipmentListView(generics.ListCreateAPIView):
     queryset = Equipment.objects.select_related("category").prefetch_related("images")
     permission_classes = [ReadOnlyOrAdmin]
@@ -39,6 +46,7 @@ class EquipmentListView(generics.ListCreateAPIView):
         return EquipmentListSerializer
 
 
+@method_decorator(cache_page(60 * 15), name="get")
 class EquipmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Equipment.objects.select_related("category").prefetch_related("images")
     permission_classes = [ReadOnlyOrAdmin]

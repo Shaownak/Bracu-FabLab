@@ -28,6 +28,8 @@ class EquipmentCategorySerializer(serializers.ModelSerializer):
         ]
 
     def get_equipment_count(self, obj):
+        if hasattr(obj, "annotated_equipment_count"):
+            return obj.annotated_equipment_count
         return obj.equipment.count()
 
 
@@ -57,12 +59,12 @@ class EquipmentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_primary_image(self, obj):
-        primary = obj.images.filter(is_primary=True).first()
-        if primary:
-            return EquipmentImageSerializer(primary).data
-        first = obj.images.first()
-        if first:
-            return EquipmentImageSerializer(first).data
+        images = list(obj.images.all())
+        for img in images:
+            if img.is_primary:
+                return EquipmentImageSerializer(img).data
+        if images:
+            return EquipmentImageSerializer(images[0]).data
         return None
 
 
