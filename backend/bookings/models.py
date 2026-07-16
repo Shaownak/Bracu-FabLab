@@ -17,6 +17,7 @@ class Booking(models.Model):
         REJECTED = "rejected", "Rejected"
         CANCELLED = "cancelled", "Cancelled"
         COMPLETED = "completed", "Completed"
+        NO_SHOW = "no_show", "No Show"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -41,6 +42,8 @@ class Booking(models.Model):
         related_name="approved_bookings",
     )
     qr_code = models.ImageField(upload_to="bookings/qrcodes/", blank=True, null=True)
+    actual_start_time = models.DateTimeField(null=True, blank=True)
+    actual_end_time = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -99,3 +102,32 @@ class BookingHistory(models.Model):
 
     def __str__(self):
         return f"{self.booking} - {self.old_status} → {self.new_status}"
+
+
+class BookingWaitlist(models.Model):
+    """Waitlist subscription for fully booked equipment time slots."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="waitlists"
+    )
+    equipment = models.ForeignKey(
+        "facilities.Equipment", on_delete=models.CASCADE, related_name="waitlists"
+    )
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        unique_together = ["user", "equipment", "date", "start_time", "end_time"]
+        verbose_name = "Booking Waitlist"
+        verbose_name_plural = "Booking Waitlists"
+        indexes = [
+            models.Index(fields=["equipment", "date"]),
+        ]
+
+    def __str__(self):
+        return f"Waitlist: {self.user.get_full_name()} - {self.equipment.name} ({self.date} {self.start_time}-{self.end_time})"
+
