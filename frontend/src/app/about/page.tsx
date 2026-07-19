@@ -144,7 +144,7 @@ export default function AboutPage() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
           >
             {teamMembers.map((member, i) => (
               <motion.div
@@ -157,15 +157,15 @@ export default function AboutPage() {
                     <Image src={member.image} alt={member.name} fill className="object-cover object-center transition-transform duration-500 group-hover:scale-105" />
                   </div>
                 ) : (
-                  <div className="aspect-[4/5] w-full bg-muted/60 text-primary flex items-center justify-center font-space font-bold text-4xl border-b border-border">
+                  <div className="aspect-[4/5] w-full bg-muted/60 text-primary flex items-center justify-center font-space font-bold text-3xl border-b border-border">
                     {member.name.charAt(0)}
                   </div>
                 )}
-                <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between">
-                  <h3 className="text-lg font-space font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{member.name}</h3>
-                  <div className="mt-3 pt-3 border-t border-border flex flex-col gap-1">
-                    <p className="text-xs font-mono font-bold uppercase tracking-wider text-primary">{member.role}</p>
-                    <p className="text-sm text-muted-foreground line-clamp-1">{member.department}</p>
+                <div className="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                  <h3 className="text-base font-space font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{member.name}</h3>
+                  <div className="mt-2.5 pt-2.5 border-t border-border flex flex-col gap-0.5">
+                    <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-primary">{member.role}</p>
+                    <p className="text-xs text-muted-foreground line-clamp-1">{member.department}</p>
                   </div>
                 </div>
               </motion.div>
