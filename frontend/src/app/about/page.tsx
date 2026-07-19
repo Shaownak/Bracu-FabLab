@@ -18,12 +18,15 @@ const staggerContainer = {
 };
 
 const teamMembers = [
-  { name: 'Dr. Ahmed Rahman', image: '/images/team_ahmed.png', role: 'Faculty Advisor', department: 'Department of CSE' },
-  { name: 'Dr. Fatima Noor', image: '/images/team_fatima.png', role: 'Faculty Advisor', department: 'Department of EEE' },
-  { name: 'Rashid Karim', image: '', role: 'Lab Manager', department: 'FabLab Operations' },
-  { name: 'Nusrat Jahan', image: '', role: 'Technical Lead', department: '3D Printing & CNC' },
-  { name: 'Tanvir Hasan', image: '', role: 'Electronics Specialist', department: 'PCB & Circuits' },
-  { name: 'Ayesha Siddiqua', image: '', role: 'Design Coordinator', department: 'Laser Cutting & Design' },
+  { name: 'Dr. Zainab Faruqui Ali', image: '', role: 'Sub-Project Manager (SPM)', department: 'Chairperson, Dept. of Architecture' },
+  { name: 'Dr. Md. Mosaddequr Rahman', image: '', role: 'Assistant SPM (ASPM)', department: 'Chairperson, Dept. of EEE' },
+  { name: 'Dr. Md. Ashraful Alam', image: '', role: 'Assistant SPM (ASPM)', department: 'Associate Professor, Dept. of CSE' },
+  { name: 'Dr. Najmul Hasan', image: '/images/team/dr_najmul_hasan.jpg', role: 'Associate Professor', department: 'BRAC Business School (Member, SPMT)' },
+  { name: 'Mr. Fardin Rahman', image: '/images/team/fardin_rahman.jpg', role: 'Lecturer', department: 'Department of Architecture' },
+  { name: 'Mr. Murshid Mahbub', image: '/images/team/murshid_mahbub.jpeg', role: 'Director', department: 'Procurement Department' },
+  { name: 'Priti Saha', image: '/images/team/priti_saha.jpg', role: 'Office Manager', department: 'FabLab Operations' },
+  { name: 'Md. Asad Alam', image: '/images/team/asad_alam.jpeg', role: 'Accountant', department: 'FabLab Operations' },
+  { name: 'Mushfiqur Rahman', image: '/images/team/mushfiqur_rahman.jpeg', role: 'Research Assistant', department: 'Department of CSE' },
 ];
 
 const industrialPartners = [
